@@ -62,6 +62,7 @@
 										<label for="academy_pwd" class="col-sm-3 control-label">教务网密码</label>
 										<div class="login_formBox">
 											<div class="col-sm-5">
+												<input type="hidden" id="ipt-sNo" value = "${loginUser.student.sNo}">
 												<input type="password" value="" class="form-control"
 													id="academy_pwd" placeholder="Password">
 											</div>

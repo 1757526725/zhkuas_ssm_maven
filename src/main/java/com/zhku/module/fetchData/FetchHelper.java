@@ -13,8 +13,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.lang.RandomStringUtils;
-
 import zhku.jackcan.webCrawler.BasicNameValuePair;
 import zhku.jackcan.webCrawler.FetchUrl;
 import zhku.jackcan.webCrawler.FetchUrlFactory;
@@ -83,7 +81,7 @@ public class FetchHelper {
 		//先抓取个人选课表(不准确 ，还是 还 课程表吧)，再 抓取 成绩 最后合并
 		String myCourseUrl = URL.USER_COURSE_TABLE_RETRIVAL_URL.getUrl();
 		FetchUrl fetchUrl = FetchUrlFactory.getFetchurl();
-		fetchUrl.setProxy("localhost",8888);
+//		fetchUrl.setProxy("localhost",8888);
 		fetchUrl.setCookies(cookie);
 		fetchUrl.setDecodeCharset("GBK");
 		StringBuffer sb = new StringBuffer();
