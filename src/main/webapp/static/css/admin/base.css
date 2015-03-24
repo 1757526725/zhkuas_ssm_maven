@@ -1,0 +1,107 @@
+.table th.text-center, .table td.text-center{
+	text-align: center;
+}
+.opt a{
+	width:10px;
+	height:30px;
+	line-height:30px;
+	margin-right: 10px;
+}
+.opt .opt-ok{
+	
+}
+.text-muted {
+  color: #999999;
+}
+
+.text-primary {
+  color: #428bca;
+}
+
+.text-warning {
+  color: #c09853;
+}
+
+.text-danger {
+  color: #b94a48;
+}
+
+.text-success {
+  color: #468847;
+}
+.text-large {
+  font-size: 14px;
+}
+.update-message{
+	float: right;
+	display: inline-block;
+	width: 500px;
+	position: relative;
+	top: -10px;
+}
+
+.update-message-left{
+	margin-top:5px;
+	float: left;
+	width: 765px;
+	top: 0px;
+}
+
+.update-message .progress{
+	margin-bottom: 0px;
+}
+
+ @media(min-width: 981px){
+    .br{
+      border-right:1px solid #ccc
+    }
+ }
+  @media(max-width: 980px){
+    .tips{
+      display: none!important;
+    }
+    .br{
+      border-right: none;
+    }
+ }
+ 
+ .buttonBox{
+	color: #666;
+	padding: 5px;
+	outline: none;
+	font-size: 15px;
+	border-right: 1px solid #bbb;
+	border-left: 1px solid #bbb;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+ }
+#optionBox{
+	display: inline-block;
+	line-height: 15px;
+}
+#optionBox input{
+	margin: 0;
+	line-height: 15px;
+}
+.tips{
+ 	color:#9e9e9e;
+ }
+.search{
+	float:right;
+}
+.search input[type=text] {
+background-color: #fff;
+color: #999;
+}
+.search button {
+background-color: #28b779;
+border: 0;
+margin-left: -3px;
+margin-top: -11px;
+padding: 5px 10px 4px;
+}
+.search button i {
+opacity: 0.8;
+color: #fff;
+}

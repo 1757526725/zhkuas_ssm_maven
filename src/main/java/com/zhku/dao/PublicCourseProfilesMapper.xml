@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.PublicCourseProfilesMapper">
+
+	<resultMap type="com.zhku.bean.PublicCourseType" id="PublicCourseTypeResultMap">
+		<id column="pctId" property="id" />
+		<result column="publicCourseTypeName" property="name" />
+	</resultMap>
+	<resultMap type="com.zhku.bean.PublicCourseProfiles" id="PublicCourseProfilesResultMap">
+		<id column="pcpId" property="id" />
+		<result column="cNo" property="cNo" />
+		<result column="recommend" property="recommend" />
+		<result column="evaluation" property="evaluation" />
+		<result column="good_count" property="goodCount" />
+		<result column="bad_count" property="badCount" />
+		<association column="pctId" property="pcType" javaType="com.zhku.bean.PublicCourseType"
+			resultMap="PublicCourseTypeResultMap"></association>
+	</resultMap>
+	<insert id="addPublicCourseProfiles" parameterType="com.zhku.bean.PublicCourseProfiles"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		zk_public_course_profiles(cNo,pctId,recommend,evaluation,good_count,bad_count)
+		values(#{cNo},#{pcType.id},#{recommend},#{evaluation},#{goodCount},#{badCount})
+	</insert>
+	<delete id="deletePublicCourseProfiles" parameterType="com.zhku.bean.PublicCourseProfiles">
+		delete
+		zk_public_course_profiles where pcpid=#{id}
+	</delete>
+
+	<update id="updatePublicCourseProfiles" parameterType="com.zhku.bean.PublicCourseProfiles">
+		update zk_public_course_profiles
+		set cNo=#{cNo},
+		pctId=#{pcType.id},
+		recommend=#{recommend},
+		evaluation=CAST(#{evaluation} AS CHAR CHARACTER SET utf8),
+		bad_count=#{badCount},
+		good_count=#{goodCount}
+		where pcpid=#{id}
+	</update>
+	
+	<select id="getPublicCourseProfilesByCno" parameterType="String" resultMap="PublicCourseProfilesResultMap">
+		select * from zk_public_course_profiles pcp left join zk_public_course_type pct on pcp.pctId= pct.pctId
+		where pcp.cNo=#{cNo}
+	</select>
+</mapper>

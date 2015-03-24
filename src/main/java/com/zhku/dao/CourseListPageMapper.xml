@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.CourseListPageMapper">
+	<resultMap type="com.zhku.bean.CourseListPage" id="CourseListPageMapper">
+		<id column="clpId" property="id"/>
+		<result column="majorNo" property="majorNo"/>
+		<result column="pageContent" property="pageContent"/>
+	</resultMap>
+	<insert id="addCourseListPage" parameterType="com.zhku.bean.CourseListPage" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO zk_zx_courselist_page(majorNo, pageContent) 
+		VALUES (#{majorNo},#{pageContent})
+	</insert>
+	
+	<update id="updateCourseListPage"  parameterType="com.zhku.bean.CourseListPage" >
+		UPDATE zk_zx_courselist_page SET 
+			majorNo=#{majorNo},
+			pageContent=#{pageContent} WHERE clpId=#{id}
+	</update>
+	
+	<delete id="deleteCourseListPage" parameterType="com.zhku.bean.CourseListPage">
+		DELETE FROM zk_zx_courselist_page WHERE clpId=#{id}
+	
+	</delete>
+	
+	<select id="getCourseListPageById" parameterType="_int"  resultMap="CourseListPageMapper">
+		SELECT * FROM zk_zx_courselist_page  WHERE clpId=#{id}
+	</select>
+	
+	<select id="getCourseListPageByMajorNo" parameterType="String" resultMap="CourseListPageMapper">
+		SELECT * FROM zk_zx_courselist_page  WHERE majorNo=#{majorNo}
+	</select>
+</mapper>

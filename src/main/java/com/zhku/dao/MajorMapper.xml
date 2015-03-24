@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.MajorMapper">
+
+	<resultMap type="com.zhku.bean.Major" id="MajorBaseResultMap">
+		<id column="mId" property="id" />
+		<result column="majorName" property="name" />
+		<result column="majorNo" property="no" />
+	</resultMap>
+	<resultMap type="com.zhku.bean.Major" id="MajorResultMap" extends="MajorBaseResultMap">
+		<association property="academy" column="organizationNo" resultMap="com.zhku.dao.OrganizationMapper.AcademyBaseResultMap">	
+		</association>
+	</resultMap>
+	
+	<insert id="addMajor" parameterType="com.zhku.bean.Major">
+		insert into
+		zk_major(majorName,majorNo,academyNo) values(#{name},#{no},#{academy.no})
+	</insert>
+
+	<delete id="deleteMajor" parameterType="com.zhku.bean.Major">
+		delete from
+		zk_major where mId=#{id}
+	</delete>
+
+	<update id="updateMajor" parameterType="com.zhku.bean.Major">
+		update
+		zk_major set majorName=#{name}, majorNo=#{no},academyNo=#{academy.no} where mId=#{id}
+	</update>
+
+	<select id="getMajorById" parameterType="_int" resultMap="MajorResultMap">
+		select * from zk_major left join zk_organization on zk_organization.organizationNo=zk_major.academyNo where mId=#{id}
+	</select>
+	<select id="getMajorByNo" parameterType="String" resultMap="MajorResultMap">
+		select * from zk_major left join zk_organization on zk_organization.organizationNo=zk_major.academyNo where majorNo=#{no}
+	</select>
+	<select id="getMajorByName" parameterType="String" resultMap="MajorResultMap">
+		select * from zk_major left join zk_organization on zk_organization.organizationNo=zk_major.academyNo where majorName=#{name}
+	</select>
+	<select id="getMajors" resultMap="MajorResultMap">
+		select * from
+		zk_major left join zk_organization on zk_organization.organizationNo=zk_major.academyNo order by zk_organization.organizationName
+	</select>
+
+
+</mapper>

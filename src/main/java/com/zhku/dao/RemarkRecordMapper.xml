@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.RemarkRecordMapper">
+	<insert id="addRemarkRecord" parameterType="com.zhku.bean.RemarkRecord"
+		useGeneratedKeys="true" keyProperty="rrid">
+		insert into
+		zk_remarkRecord(cNo,uid,remarkItem)
+		values(#{cNo},#{uid},#{remarkItem})
+	</insert>
+
+	<delete id="deleteRemarkRecord" parameterType="com.zhku.bean.RemarkRecord">
+		delete from
+		zk_remarkRecord where rrid=#{rrid}
+	</delete>
+
+	<update id="updateRemarkRecord" parameterType="com.zhku.bean.RemarkRecord">
+		update
+		zk_remarkRecord
+		set cNo=#{cNo},uid=#{uid},remarkItem=#{remarkItem}
+	</update>
+
+	<select id="getRemarkRecordByCnoAndUid" parameterType="Map" resultType="com.zhku.bean.RemarkRecord">
+		select * from zk_remarkRecord where cNo=#{cNo} and uid=#{uid}
+	</select>
+	
+	<select id="getRemarkRecordByRrid" parameterType="_int">
+		select * from zk_remarkRecord where rrid=#{rrid}
+	</select>
+</mapper>

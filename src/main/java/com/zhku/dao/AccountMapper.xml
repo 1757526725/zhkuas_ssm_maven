@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.AccountMapper">
+
+	<resultMap type="com.zhku.bean.Account" id="AccountBaseResultMap">
+		<id column="accountId" property="id" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+	</resultMap>
+	<resultMap type="com.zhku.bean.Account" id="AccountResultMap" extends="AccountBaseResultMap">
+		<association property="campus" column="campusId" resultMap="com.zhku.dao.CampusAreaMapper.CampusAreaBaseResultMap">	
+		</association>
+	</resultMap>
+	
+	<insert id="addAccount" parameterType="com.zhku.bean.Account" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		zk_sys_account(username,password,campusId) values(#{username},#{password},#{campus.id})
+	</insert>
+
+	<delete id="deleteAccount" parameterType="com.zhku.bean.Account">
+		delete from
+		zk_sys_account where accountId=#{id}
+	</delete>
+
+	<update id="updateAccount" parameterType="com.zhku.bean.Account">
+		update
+		zk_sys_account set username=#{username}, password=#{password},campusId=#{campus.id} where accountId=#{id}
+	</update>
+
+	<select id="getAccountsByCampusId" parameterType="_int" resultMap="AccountResultMap">
+		SELECT
+		zk_sys_account.accountId,
+		zk_sys_account.username,
+		zk_sys_account.`password`,
+		zk_sys_account.campusId,
+		zk_campus.campusName
+		FROM
+		zk_sys_account  left join  zk_campus  on zk_sys_account.campusId = zk_campus.campusId
+		where zk_campus.campusId = #{campusId}
+	</select>
+	
+</mapper>

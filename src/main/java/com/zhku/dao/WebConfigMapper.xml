@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.WebConfigMapper">
+	<resultMap type="com.zhku.bean.WebConfig" id="WebConfigBaseResultMap">
+		<id column="wConfigId" property="id"/>
+		<result column="siteName" property="siteName"/>
+		<result column="domain" property="domain"/>
+		<result column="description" property="description"/>
+		<result column="keyword" property="keyword"/>
+		<result column="webfooterInfo" property="webfooterInfo"/>
+		<association property="currentTerm" column="termNo"  resultMap="com.zhku.dao.TermMapper.TermBaseResultMap"></association>
+	</resultMap>
+	<select id="getWebConfig" resultMap="WebConfigBaseResultMap">
+		select * from zk_web_config left join zk_term on zk_web_config.termNo = zk_term.termNo where wConfigId =1;
+	</select>
+	
+	<update id="updateWebConfig" parameterType="com.zhku.bean.WebConfig">
+		update zk_web_config 
+		<set>
+			<if test="siteName != null">
+				siteName = #{siteName},
+			</if>
+			<if test="domain != null">
+				domain = #{domain},
+			</if>
+			<if test="description != null">
+				description = #{description},
+			</if>
+			<if test="keyword != null">
+				keyword = #{keyword},
+			</if>
+			<if test="webfooterInfo != null">
+				webfooterInfo = #{webfooterInfo},
+			</if>
+			<if test="currentTerm.no != null">
+				termNo = #{currentTerm.no}
+			</if>
+		</set>
+		where wConfigId =#{id}
+	</update>
+</mapper>

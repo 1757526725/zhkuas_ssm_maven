@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.UserMapper">
+	<resultMap type="com.zhku.bean.User" id="UserResultMap">
+		<id column="uId" property="uid" />
+		<result column="nickName" property="nickName" />
+		<result column="email" property="email" />
+		<result column="avatorUrl" property="avatorUrl" />
+		<result column="state" property="state" />
+		<result column="isDIYAvater" property="isDIYAvater" />
+		<result column="description" property="description" />
+		<result column="sinaUid" property="sinaUid" />
+		<association property="student" column="sNo"
+			javaType="com.zhku.bean.Student" resultMap="com.zhku.dao.StudentMapper.StudentResultMap"></association>
+	</resultMap>
+
+	<sql id="fullSelectClumm">
+		zk_user.uId,
+		zk_user.nickName,
+		zk_user.email,
+		zk_user.state,
+		zk_user.avatorUrl,
+		zk_user.isDIYAvater,
+		zk_user.description,
+		zk_user.sinaUid,
+		zk_student.sId,
+		zk_student.sNo,
+		zk_student.studentName,
+		zk_student.studentSex,
+		zk_class.classId,
+		zk_class.className,
+		zk_class.classNo,
+		zk_class.grade,
+		zk_major.`mId`,
+		zk_major.majorName,
+		zk_major.majorNo,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_campus_class_rs.ccrsid,
+		zk_campus.campusId,
+		zk_campus.campusName
+	</sql>
+	<sql id="fullJoinRS">
+		zk_user left join
+		zk_student on zk_user.sNo = zk_student.sNo left join
+		zk_class on zk_class.classNo = zk_student.classNo left join
+		zk_major on zk_major.majorNo = zk_class.majorNo left join
+		zk_organization on zk_major.academyNo =zk_organization.organizationNo left join
+		zk_campus_class_rs on zk_campus_class_rs.classNo = zk_class.classNo
+		left join
+		zk_campus on zk_campus_class_rs.campusId = zk_campus.campusId
+
+	</sql>
+	<insert id="addUser" parameterType="com.zhku.bean.User"
+		useGeneratedKeys="true" keyProperty="uid">
+		insert into zk_user(nickName,
+		avatorUrl,sinaUid,description)
+		values(#{nickName},#{avatorUrl},#{sinaUid},#{description})
+	</insert>
+	<delete id="deleteUser" parameterType="com.zhku.bean.User">
+		delete zk_user where
+		uid=#{uid}
+	</delete>
+	<update id="updateUser" parameterType="com.zhku.bean.User">
+		UPDATE zk_user SET
+		sNo=#{student.sNo},nickName=#{nickName},email=#{email},state=#{state}
+		,avatorUrl=#{avatorUrl},isDIYAvater=#{isDIYAvater},description=#{description},sinaUid=#{sinaUid}
+		WHERE uid=#{uid}
+	</update>
+	<select id="getUserById" parameterType="_int" resultMap="UserResultMap">
+		select 
+		<include refid="fullSelectClumm"/>
+		from
+		<include refid="fullJoinRS"/>
+		where zk_user.uId=#{id}
+	</select>
+	<select id="getUserBySid" parameterType="_int" resultMap="UserResultMap">
+		select 
+		<include refid="fullSelectClumm"/>
+		from
+		<include refid="fullJoinRS"/>
+		 where zk_student.sId=#{id}
+	</select>
+	<select id="getUsersBySno" parameterType="String" resultMap="UserResultMap">
+		select 
+		<include refid="fullSelectClumm"/>
+		from
+		<include refid="fullJoinRS"/>
+		where zk_student.sNo=#{sNo}
+	</select>
+	<select id="getUsers" resultMap="UserResultMap">
+	select 
+		<include refid="fullSelectClumm"/>
+		from
+		<include refid="fullJoinRS"/>
+	</select>
+	<select id="getUserByEmail" parameterType="String" resultMap="UserResultMap">
+		select 
+		<include refid="fullSelectClumm"/>
+		from
+		<include refid="fullJoinRS"/> where zk_user.email=#{email}
+	</select>
+	<select id="findUserBySinaUid" parameterType="String" resultMap="UserResultMap">
+		select 
+		<include refid="fullSelectClumm"/>
+		from
+		<include refid="fullJoinRS"/>
+		 where zk_user.sinaUid=#{sinaUid}
+	</select>
+	
+	<select id="findUserByKeyword" parameterType="String" resultMap="UserResultMap">
+		select 
+		<include refid="fullSelectClumm"/>
+		from
+		<include refid="fullJoinRS"/>
+		 where zk_user.sinaUid like '%${_parameter}%' or zk_user.nickName like '%${_parameter}%' or zk_user.sNo like '%${_parameter}%' 
+		 or zk_student.studentName like '%${_parameter}%'
+	</select>
+	
+	<select id="getAdminUserBySinaUid" parameterType="String"
+		resultMap="UserResultMap">
+		select * from zk_admin a left join zk_user u on u.uid=a.uid
+		left join zk_student st on u.sNo=st.sNo left
+		join zk_class zc on
+		st.classNo=zc.classNo where sinaUid=#{sinaUid}
+	</select>
+</mapper>

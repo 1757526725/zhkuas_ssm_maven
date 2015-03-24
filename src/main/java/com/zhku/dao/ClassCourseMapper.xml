@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.ClassCourseMapper">
+	<resultMap type="com.zhku.bean.ClassCourse" id="classCourseResultMap_Base">
+		<id column="ccId" property="id" />
+		<result column="termCourseId" property="id" />
+		<association property="baseClass" column="classNo"
+			resultMap="com.zhku.dao.BaseClassMapper.baseClassResultMap">
+		</association>
+	</resultMap>
+
+	<insert id="addClassCourse" parameterType="com.zhku.bean.ClassCourse" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		zk_class_course(classNo, termCourseId)
+		VALUES
+		(#{baseClass.no},#{termCourseId})
+	</insert>
+
+	<update id="updateClassCourse" parameterType="com.zhku.bean.ClassCourse">
+		UPDATE zk_class_course
+		SET classNo=#{baseClass.classNo},
+		termCourseId=#{termCourseId}
+		WHERE ccId=#{id}
+	</update>
+
+	<select id="getClassCourses" resultMap="classCourseResultMap_Base">
+		SELECT * FROM zk_class_course
+		cc left join zk_class cl on cc.classNo=cl.classNo left join
+		zk_xq_course xqc on cc.termCourseId=xqc.termCourseId left join zk_teacher t on
+		xqc.tNo= t.tNo LEFT JOIN zk_course c ON xqc.cNo = c.cNo LEFT JOIN
+		zk_organization o ON c.oId = o.oId
+	</select>
+
+	<select id="getClassCourseById" parameterType="_int"
+		resultMap="classCourseResultMap_Base">
+
+		SELECT * FROM zk_class_course cc left join zk_class cl on
+		cc.classNo=cl.classNo
+		left join zk_xq_course xqc on cc.termCourseId=xqc.termCourseId
+		left join zk_teacher
+		t on xqc.tNo= t.tNo LEFT JOIN zk_course c ON
+		xqc.cNo = c.cNo LEFT JOIN
+		zk_organization o ON c.oId = o.oId
+		where
+		ccId=#{id}
+	</select>
+
+	<select id="findClassCourse" parameterType="Map"
+		resultMap="classCourseResultMap_Base">
+
+		SELECT * FROM zk_class_course cc left join zk_class cl on
+		cc.classNo=cl.classNo
+		left join zk_term_course xqc on cc.termCourseId=xqc.termCourseId
+		where
+		cl.classNo=#{classNo} and xqc.termNo=#{termNo} and xqc.termCourseId=#{termCourseId}
+	</select>
+
+	<delete id="deleteClassCourse" parameterType="com.zhku.bean.ClassCourse">
+		delete from
+		zk_class_course where ccId=#{id}
+	</delete>
+
+
+</mapper>

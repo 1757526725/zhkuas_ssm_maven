@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.SchoolBuildingMapper">
+	<sql id="schoolBuilding_select_list">
+		zk_school_building.sbId,
+		zk_school_building.schoolBuildingName,
+		zk_school_building.campusId,
+		zk_school_building.schoolBuildingNo,
+		zk_classroom.classroomId,
+		zk_classroom.classroomName,
+		zk_classroom.classroomNo,
+		zk_campus.campusName
+	</sql>
+	<resultMap type="com.zhku.bean.SchoolBuilding" id="SchoolBuildingBaseResultMap">
+		<id column="sbId" property="id" />
+		<result column="schoolBuildingName" property="name" />
+		<result column="schoolBuildingNo" property="no" />
+	</resultMap>
+	<resultMap type="com.zhku.bean.SchoolBuilding" id="SchoolBuildingResultMap" extends="SchoolBuildingBaseResultMap">
+		<association property="campusArea" column="campusId" javaType="com.zhku.bean.CampusArea" resultMap="com.zhku.dao.CampusAreaMapper.CampusAreaBaseResultMap"></association>
+		<collection property="classrooms" column="classroomNo" javaType="java.util.List" ofType="com.zhku.bean.Classroom" resultMap="com.zhku.dao.ClassroomMapper.ClassroomBaseResultMap"></collection>
+	</resultMap>
+	<insert id="addSchoolBuilding" parameterType="com.zhku.bean.SchoolBuilding" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		zk_school_building(schoolBuildingName,campusId,schoolBuildingNo) values( #{name},#{compusArea.id},#{no})
+	</insert>
+
+	<delete id="deleteSchoolBuilding" parameterType="com.zhku.bean.SchoolBuilding">
+		delete from
+		zk_school_building where sbId=#{id}
+	</delete>
+
+	<update id="updateSchoolBuilding" parameterType="com.zhku.bean.SchoolBuilding">
+		update
+		zk_school_building set schoolBuildingName=#{name},schoolBuildingNo=#{no},campusId=#{compusArea.id} where sbId=#{id}
+	</update>
+
+	<select id="getSchoolBuildingById" parameterType="_int" resultMap="SchoolBuildingBaseResultMap">
+		select * from zk_school_building where sbId=#{id}
+	</select>
+	<select id="getSchoolBuildingByNo" parameterType="String" resultMap="SchoolBuildingBaseResultMap">
+		select * from zk_school_building where schoolBuildingNo=#{no}
+	</select>
+
+	<select id="getSchoolBuildings" resultMap="SchoolBuildingBaseResultMap">
+		select * from
+		zk_school_building
+	</select>
+	<select id="getSchoolBuildingsWithClassroomList" resultMap="SchoolBuildingResultMap">
+		select <include refid="schoolBuilding_select_list"/> from
+		zk_school_building left join 
+		zk_campus  on zk_school_building.campusId = zk_campus.campusId left join 
+		zk_classroom on zk_school_building.schoolBuildingNo = zk_classroom.schoolBuildingNo
+	</select>
+
+	<select id="getSchoolBuildingsByCompusId" parameterType="_int" resultMap="SchoolBuildingBaseResultMap">
+		select * from
+		zk_school_building where campusId=#{campusId}
+	</select>
+</mapper>

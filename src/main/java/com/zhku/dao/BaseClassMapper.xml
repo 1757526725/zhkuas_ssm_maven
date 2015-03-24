@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.BaseClassMapper">
+
+
+	<resultMap type="com.zhku.bean.BaseClass" id="baseClassResultMap">
+		<id column="classId" property="id" />
+		<result column="className" property="name" />
+		<result column="classNo" property="no" />
+		<result column="grade" property="grade" />
+	</resultMap>
+	<resultMap type="com.zhku.bean.BaseClass" id="ClassWithMajorResultMap"
+		extends="baseClassResultMap">
+		<association property="major" column="majorNo"
+			resultMap="com.zhku.dao.MajorMapper.MajorResultMap"></association>
+	</resultMap>
+	<resultMap type="com.zhku.bean.BaseClass" id="ClassWithCampusAreaResultMap"
+		extends="ClassWithMajorResultMap">
+		<association property="campus" column="campusId"
+			resultMap="com.zhku.dao.CampusAreaMapper.CampusAreaBaseResultMap"></association>
+	</resultMap>
+	<resultMap type="com.zhku.bean.BaseClass" id="BaseClassWithCourseListResultMap"
+		extends="baseClassResultMap">
+		<collection property="courseList" javaType="java.util.List"
+			ofType="com.zhku.bean.TermCourse" resultMap="com.zhku.dao.TermCourseMapper.termCourseResultMap">
+		</collection>
+	</resultMap>
+
+	<sql id="fullSelectClumm">
+		zk_class.classId,
+		zk_class.className,
+		zk_class.majorNo,
+		zk_class.grade,
+		zk_class_course.ccId,
+		zk_class_course.classNo,
+		zk_term_course.termCourseId,
+		zk_term_course.courseClassNo,
+		zk_term_course.studentNum,
+		zk_term_course.periods,
+		zk_term_course.classWeek,
+		zk_term_course.classSection,
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.termNo,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_term.status,
+		zk_course_teacher_rs.courseTeacherRSId,
+		zk_teacher.tId,
+		zk_teacher.tNo,
+		zk_teacher.teacherName,
+		zk_teacher.teacherNameNo,
+		zk_classroom.classroomId,
+		zk_classroom.classroomName,
+		zk_classroom.classroomNo,
+		zk_classroom.schoolBuildingNo,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_class.classNo,
+		zk_course.cId,
+		zk_course.cNo,
+		zk_course.cName,
+		zk_course.cEnglishName,
+		zk_course.cNameNo,
+		zk_course.courseType,
+		zk_course.qualityHours,
+		zk_course.cCredits,
+		zk_course.teachingHours,
+		zk_course.experimentalHours,
+		zk_course.computerClassHours,
+		zk_course.otherClassHours,
+		zk_course.teachingProgram
+	</sql>
+		<sql id="fullSelectClumm_term_temp">
+		zk_class.classId,
+		zk_class.className,
+		zk_class.majorNo,
+		zk_class.grade,
+		zk_class_course.ccId,
+		zk_class_course.classNo,
+		zk_term_course_temp.termCourseId,
+		zk_term_course_temp.courseClassNo,
+		zk_term_course_temp.studentNum,
+		zk_term_course_temp.periods,
+		zk_term_course_temp.classWeek,
+		zk_term_course_temp.classSection,
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.termNo,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_term.status,
+		zk_course_teacher_rs.courseTeacherRSId,
+		zk_teacher.tId,
+		zk_teacher.tNo,
+		zk_teacher.teacherName,
+		zk_teacher.teacherNameNo,
+		zk_classroom.classroomId,
+		zk_classroom.classroomName,
+		zk_classroom.classroomNo,
+		zk_classroom.schoolBuildingNo,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_class.classNo,
+		zk_course.cId,
+		zk_course.cNo,
+		zk_course.cName,
+		zk_course.cEnglishName,
+		zk_course.cNameNo,
+		zk_course.courseType,
+		zk_course.qualityHours,
+		zk_course.cCredits,
+		zk_course.teachingHours,
+		zk_course.experimentalHours,
+		zk_course.computerClassHours,
+		zk_course.otherClassHours,
+		zk_course.teachingProgram
+	</sql>
+	<sql id="fullJoinRS">
+		zk_class left join 
+		zk_class_course on zk_class_course.classNo =zk_class.classNo left join
+		zk_term_course on zk_class_course.termCourseId = zk_term_course.termCourseId left join
+		zk_term on zk_term_course.termNo = zk_term.termNo left join 
+		zk_course_teacher_rs on zk_course_teacher_rs.courseTeacherRSId = zk_term_course.courseTeacherRSId left join
+		zk_teacher on zk_course_teacher_rs.tNo = zk_teacher.tNo left join 
+		zk_classroom on zk_term_course.classroomNo =zk_classroom.classroomNo left join 
+		zk_course on zk_course_teacher_rs.cNo=zk_course.cNo left join 
+		zk_organization on zk_organization.organizationNo = zk_course.organizationNo
+	</sql>
+	<select id="getBaseClasses" resultMap="baseClassResultMap">
+		select * from zk_class
+	</select>
+
+	<select id="getBaseClassById" parameterType="_int" resultMap="baseClassResultMap">
+		select * from zk_class where classId=#{id}
+	</select>
+
+	<select id="getBaseClassByClassNo" parameterType="String"
+		resultMap="baseClassResultMap">
+		select * from zk_class where classNo=#{no}
+	</select>
+	<select id="getBaseClassByClassName" parameterType="String"
+		resultMap="baseClassResultMap">
+		select * from zk_class where className=#{name}
+	</select>
+
+	<select id="getBaseClassesByClassName" parameterType="String"
+		resultMap="baseClassResultMap">
+		select * from zk_class where className like
+		'%${_parameter}%'
+	</select>
+
+	<insert id="addBaseClass" parameterType="com.zhku.bean.BaseClass"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		zk_class(className,classNo,majorNo,grade)
+		values(#{name},#{no},#{major.no},#{grade})
+	</insert>
+
+	<delete id="deleteBaseClass" parameterType="com.zhku.bean.BaseClass">
+		delete from zk_class
+		where classId = #{id}
+	</delete>
+
+	<update id="updateBaseClass" parameterType="com.zhku.bean.BaseClass">
+		update zk_class set
+		className=#{name} ,classNo=#{no} where classId=#{id}
+	</update>
+
+	<select id="getBaseClassesByNameArray" parameterType="java.util.List"
+		resultMap="baseClassResultMap">
+		select * from zk_class where className in
+		<foreach collection="array" item="className" index="index"
+			open="(" close=")" separator=",">
+			#{name}
+		</foreach>
+
+	</select>
+
+	<select id="getBaseClassWithCourseListByIdAndTermNo"
+		parameterType="Map" resultMap="BaseClassWithCourseListResultMap">
+
+		SELECT 
+		<include refid="fullSelectClumm"/>
+		from
+		<include refid="fullJoinRS"/>
+		where
+		zk_class.classId=#{id} and
+		zk_term_course.termNo=#{termNo}
+	</select>
+	
+	<select id="getBaseClassesByMajorNo" parameterType="String"
+		resultMap="baseClassResultMap">
+		select * from zk_class left join zk_major on zk_class.majorNo = zk_major.majorNo where zk_major.majorNo=#{majorNo}
+	</select>
+	<select id="getBaseClassWithCourseListByClassNoAndTermNo"
+		parameterType="Map" resultMap="BaseClassWithCourseListResultMap">
+
+		SELECT 
+		<include refid="fullSelectClumm_term_temp"/>
+		from
+		zk_class left join 
+		zk_class_course on zk_class_course.classNo =zk_class.classNo left join
+		(select * from zk_term_course where zk_term_course.termNo=#{termNo}) zk_term_course_temp on zk_class_course.termCourseId = zk_term_course_temp.termCourseId left join zk_term on zk_term_course_temp.termNo = zk_term.termNo left join 
+		zk_course_teacher_rs on zk_course_teacher_rs.courseTeacherRSId = zk_term_course_temp.courseTeacherRSId left join
+		zk_teacher on zk_course_teacher_rs.tNo = zk_teacher.tNo left join 
+		zk_classroom on zk_term_course_temp.classroomNo =zk_classroom.classroomNo left join 
+		zk_course on zk_course_teacher_rs.cNo=zk_course.cNo left join 
+		zk_organization on zk_organization.organizationNo = zk_course.organizationNo
+		where
+		zk_class.classNo=#{no}
+		order by zk_course.cNo
+	</select>
+
+
+</mapper>

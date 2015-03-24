@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.TermCourseMapper">
+	<resultMap type="com.zhku.bean.TermCourse" id="termCourseResultMap">
+		<id column="termCourseId" property="id" />
+		<result column="courseClassNo" property="courseClassNo" />
+		<result column="studentNum" property="studentNum" />
+		<result column="periods" property="periods" />
+		<result column="classWeek" property="classWeek" />
+		<result column="courseTeacherRSId" property="courseTeacherRSId" />
+		<result column="classSection" property="classSection" />
+		<association property="term" column="termNo"
+			resultMap="com.zhku.dao.TermMapper.TermBaseResultMap"></association>
+		<association property="classroom" column="classroomNo"
+			javaType="com.zhku.bean.Classroom" resultMap="com.zhku.dao.ClassroomMapper.ClassroomBaseResultMap"></association>
+		<association property="course" column="cNo"
+			javaType="com.zhku.bean.Course" resultMap="com.zhku.dao.CourseMapper.courseResultMap"></association>
+		<association property="teacher" column="tNo"
+			javaType="com.zhku.bean.Teacher" resultMap="com.zhku.dao.TeacherMapper.teacherResultMap"></association>
+	</resultMap>
+
+	<resultMap type="com.zhku.bean.TermCourse" id="termCourseResultMap_List"
+		extends="termCourseResultMap">
+		<collection property="classList" javaType="java.util.List"
+			ofType="com.zhku.bean.BaseClass" resultMap="com.zhku.dao.BaseClassMapper.baseClassResultMap">
+		</collection>
+	</resultMap>
+	<sql id="baseSeletClumm">
+		zk_term_course.termCourseId,
+		zk_term_course.termNo,
+		zk_term_course.courseTeacherRSId,
+		zk_term_course.courseClassNo,
+		zk_term_course.studentNum,
+		zk_term_course.periods,
+		zk_term_course.classWeek,
+		zk_term_course.classSection,
+		zk_term_course.classroomNo,
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_course_teacher_rs.cNo,
+		zk_course_teacher_rs.tNo,
+		zk_course.cId,
+		zk_course.cName,
+		zk_course.cEnglishName,
+		zk_course.organizationNo,
+		zk_course.cNameNo,
+		zk_course.courseType,
+		zk_course.qualityHours,
+		zk_course.cCredits,
+		zk_course.teachingHours,
+		zk_course.experimentalHours,
+		zk_course.computerClassHours,
+		zk_course.otherClassHours,
+		zk_course.teachingProgram,
+		zk_teacher.tId,
+		zk_teacher.teacherName,
+		zk_teacher.teacherNameNo,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId
+	</sql>
+	<select id="getTermCourses" resultMap="termCourseResultMap">
+		SELECT * FROM zk_xq_course
+		xqc left join zk_teacher t on xqc.tNo= t.tNo LEFT JOIN zk_course c ON
+		xqc.cNo = c.cNo LEFT JOIN zk_organization o ON c.oId = o.oId
+	</select>
+
+	<insert id="addTermCourse" parameterType="com.zhku.bean.TermCourse"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		`zk_term_course`(`termNo`, `courseTeacherRSId`,
+		`courseClassNo`,
+		`studentNum`, `periods`, `classWeek`, `classSection`,
+		`classroomNo`)
+		VALUES
+		(#{term.no},#{courseTeacherRSId},#{courseClassNo},#{studentNum},#{periods},#{classWeek},#{classSection},#{classroom.no})
+	</insert>
+
+	<delete id="deleteTermCourse" parameterType="com.zhku.bean.TermCourse">
+		delete from
+		zk_xq_course where termCourseId=#{id}
+	</delete>
+
+	<select id="getTermCourseById" parameterType="_int"
+		resultMap="termCourseResultMap_List">
+
+	</select>
+
+	<select id="getTermCourseByTermNoAndCnoAndclassNoAndTno"
+		parameterType="map" resultMap="termCourseResultMap">
+
+	</select>
+
+	<select id="findTermCourseByConditions" parameterType="com.zhku.bean.TermCourse"
+		resultMap="termCourseResultMap">
+		select
+		<include refid="baseSeletClumm" />
+		FROM
+		zk_term_course left join
+		zk_term on zk_term_course.termNo =
+		zk_term.termNo left join
+		zk_course_teacher_rs on
+		zk_term_course.courseTeacherRSId=
+		zk_course_teacher_rs.courseTeacherRSId left join
+		zk_course on
+		zk_course_teacher_rs.cNo = zk_course.cNo left join
+		zk_teacher on
+		zk_course_teacher_rs.tNo = zk_teacher.tNo left join
+		zk_organization on
+		zk_course.organizationNo
+		where 
+		zk_term_course.courseClassNo =#{courseClassNo} and zk_term_course.periods = #{periods} and zk_term_course.classWeek = #{classWeek}
+		and zk_term_course.classSection =#{classSection} and classroomNo = #{classroom.no}
+		<if test="id != 0">and zk_term_course.termCourseId=${id}</if>
+		<if test="course !=null and course.no != null"> and zk_course_teacher_rs.cNo=${course.no}</if>
+		<if test="course !=null and course.nameNo != null"> and zk_course.cNameNo=${course.nameNo}</if>
+		<if test="teacher !=null and teacher.no != null">and zk_course_teacher_rs.tNo=${teacher.no}</if>
+		<if test="term !=null and term.no != null">and zk_course_teacher_rs.termNo=${term.no}</if>
+	</select>
+
+	<select id="getTermCoursesByTermNo" parameterType="String"
+		resultMap="termCourseResultMap">
+		select
+		<include refid="baseSeletClumm" />
+		FROM
+		zk_term_course left join
+		zk_term on zk_term_course.termNo =
+		zk_term.termNo left join
+		zk_course_teacher_rs on
+		zk_term_course.courseTeacherRSId=
+		zk_course_teacher_rs.courseTeacherRSId left join
+		zk_course on
+		zk_course_teacher_rs.cNo = zk_course.cNo left join
+		zk_teacher on
+		zk_course_teacher_rs.tNo = zk_teacher.tNo left join
+		zk_organization on
+		zk_course.organizationNo
+		where zk_term_course.termNo=#{term.no}
+	</select>
+
+	<update id="updateTermCourse" parameterType="com.zhku.bean.TermCourse">
+
+	</update>
+</mapper>

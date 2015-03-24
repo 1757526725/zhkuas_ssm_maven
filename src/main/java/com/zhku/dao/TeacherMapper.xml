@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.TeacherMapper">
+
+	<resultMap type="com.zhku.bean.Teacher" id="teacherResultMap">
+		<id column="tId" property="id" />
+		<result column="tNo" property="no" />
+		<result column="teacherName" property="name" />
+		<result column="teacherNameNo" property="nameNo" />
+	</resultMap>
+
+	<insert id="addTeacher" parameterType="com.zhku.bean.Teacher" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		zk_teacher(teacherName,tNo,teacherNameNo)
+		values(#{name},#{no},#{nameNo})
+	</insert>
+
+
+	<delete id="deleteTeacher" parameterType="com.zhku.bean.Teacher">
+		delete from zk_teacher
+		where tId=#{id}
+	</delete>
+
+	<select id="getTeacherById" parameterType="_int" resultMap="teacherResultMap">
+
+		select * from zk_teacher where tId=#{id}
+	</select>
+
+	<select id="getTeacherByTno" parameterType="String" resultMap="teacherResultMap">
+		select * from zk_teacher where tNo = #{no}
+	</select>
+
+	<select id="getTeachers" resultMap="teacherResultMap">
+		select * from zk_teacher ;
+	</select>
+
+	<update id="updateTeacher" parameterType="com.zhku.bean.Teacher">
+		update zk_teacher set
+		tNo=#{no} ,teacherName=#{name} teacherNameNo=#{nameNo} where tId={tId}
+	</update>
+
+	<select id="getTeacherByTnameNo" parameterType="String"
+		resultMap="teacherResultMap">
+		select * from zk_teacher where teacherNameNo=#{nameNo}
+	</select>
+	<select id="getTeacherByTname" parameterType="String"
+		resultMap="teacherResultMap">
+		select * from zk_teacher where teacherName=#{name}
+	</select>
+</mapper>

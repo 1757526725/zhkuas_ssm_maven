@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.PublicCourseOptionMapper">
+	<resultMap type="com.zhku.bean.PublicCourseOption" id="PublicCourseOptionBaseResultMap">
+		<id column="pcoid" property="id" />
+		<result column="cNo" property="cNo" />
+		<result column="termNo" property="termNo" />
+		<result column="optionHtml" property="optionHtml" />
+		<association property="campus" column="campusId" resultMap="com.zhku.dao.CampusAreaMapper.CampusAreaBaseResultMap"></association>
+	</resultMap>
+	<insert id="addPublicCourseOption" parameterType="com.zhku.bean.PublicCourseOption" useGeneratedKeys="true" keyProperty="id">
+		insert into zk_public_course_option(termNo, campusId, cNo, optionHtml)
+		values(#{termNo},#{campus.id},#{cNo},#{optionHtml})
+	</insert>
+	<delete id="deletePublicCourseOption" parameterType="com.zhku.bean.PublicCourseOption">
+		delete from zk_public_course_option where pcoId=#{id}
+	</delete>
+	
+	<update id="updatePublicCourseOption" parameterType="com.zhku.bean.PublicCourseOption" >
+		UPDATE zk_public_course_option 
+		SET termNo=#{termNo},campusId=#{campus.id},cNo=#{termNo},optionHtml=#{optionHtml} WHERE pcoId=#{id}
+	</update>
+	
+	<select id="getPublicCourseOptionById" parameterType="_int" resultMap="PublicCourseOptionBaseResultMap">
+		select 
+			zk_public_course_option.pcoId,
+			zk_public_course_option.termNo,
+			zk_public_course_option.cNo,
+			zk_public_course_option.optionHtml,
+			zk_campus.campusId,
+			zk_campus.campusName
+		 from zk_public_course_option left join zk_campus on zk_public_course_option.campusId = zk_campus.campusId where pcoId=#{id}
+	</select>
+	
+	<select id="findPublicCourseOption" parameterType="com.zhku.bean.PublicCourseOption" resultMap="PublicCourseOptionBaseResultMap">
+		select
+		zk_public_course_option.pcoId,
+		zk_public_course_option.termNo,
+		zk_public_course_option.cNo,
+		zk_public_course_option.optionHtml,
+		zk_campus.campusId,
+		zk_campus.campusName 
+		 from zk_public_course_option left join zk_campus on zk_public_course_option.campusId = zk_campus.campusId  where termNo=#{termNo} and cNo=#{cNo} and zk_public_course_option.campusId=#{campus.id}
+	</select>
+</mapper>

@@ -1,0 +1,22 @@
+.noticePlice{
+
+  float: right;
+}
+
+.view-group-title{
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.sign-flow.dialog .view-info  .w-auto{
+  width: 400px;
+}
+
+#jiaowu-Info{
+  padding-left: 0;
+}
+
+#bind-summary{
+	
+	width:400px;
+}

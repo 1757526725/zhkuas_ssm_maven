@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.CourseTeacherRSMapper">
+
+	<resultMap type="com.zhku.bean.CourseTeacherRS" id="CourseTeacherRSBaseResultMap">
+		<id column="courseTeacherRSId" property="id" />
+		<result column="cNo" property="cNo" />
+		<result column="tNo" property="tNo" />
+	</resultMap>
+	
+	<insert id="addCourseTeacherRS" parameterType="com.zhku.bean.CourseTeacherRS" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		zk_course_teacher_rs(cNo,tNo) values( #{cNo},#{tNo})
+	</insert>
+
+	<delete id="deleteCourseTeacherRS" parameterType="com.zhku.bean.CourseTeacherRS">
+		delete from
+		zk_course_teacher_rs where courseTeacherRSid=#{id}
+	</delete>
+
+	<update id="updateCourseTeacherRS" parameterType="com.zhku.bean.CourseTeacherRS">
+		update
+		zk_course_teacher_rs set cNo=#{no},tNo=#{tNo} where courseTeacherRSid=#{id}
+	</update>
+
+	<select id="getCourseTeacherRSById" parameterType="_int" resultMap="CourseTeacherRSBaseResultMap">
+		select * from zk_course_teacher_rs where courseTeacherRSid=#{id}
+	</select>
+
+	<select id="getCourseTeacherRSs" resultMap="CourseTeacherRSBaseResultMap">
+		select * from
+		zk_course_teacher_rs
+	</select>
+
+	<select id="getCourseTeacherRSbyConditions" parameterType="com.zhku.bean.CourseTeacherRS" resultMap="CourseTeacherRSBaseResultMap">
+		select * from
+		zk_course_teacher_rs where tNo=#{tNo} and cNo=#{cNo}
+	</select>
+</mapper>

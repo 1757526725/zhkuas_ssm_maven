@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.MyScheduleMapper">
+	<resultMap type="com.zhku.bean.MySchedule" id="MySchedule_resultMap">
+		<id column="msdId" property="id" />
+		<result column="termNo" property="termNo" />
+		<result column="uId" property="uid" />
+		<result column="termCourseId" property="termCourseId" />
+		<result column="state" property="state" />
+		<association property="termCourse" column="termCourseId"
+			resultMap="com.zhku.dao.TermCourseMapper.termCourseResultMap">
+		</association>
+	</resultMap>
+
+	<sql id="baseSelectClumm">
+		zk_my_schedule.msdId,
+		zk_my_schedule.uId,
+		zk_my_schedule.state,
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_term.status,
+		zk_term_course.termCourseId,
+		zk_term_course.courseClassNo,
+		zk_term_course.studentNum,
+		zk_term_course.periods,
+		zk_term_course.classWeek,
+		zk_term_course.classSection,
+		zk_course_teacher_rs.courseTeacherRSId,
+		zk_classroom.classroomId,
+		zk_classroom.classroomName,
+		zk_classroom.classroomNo,
+		zk_classroom.schoolBuildingNo,
+		zk_course.cId,
+		zk_course.cNo,
+		zk_course.cName,
+		zk_course.cEnglishName,
+		zk_course.organizationNo,
+		zk_course.cNameNo,
+		zk_course.courseType,
+		zk_course.qualityHours,
+		zk_course.cCredits,
+		zk_course.teachingHours,
+		zk_course.experimentalHours,
+		zk_course.computerClassHours,
+		zk_course.otherClassHours,
+		zk_course.teachingProgram,
+		zk_teacher.tId,
+		zk_teacher.tNo,
+		zk_teacher.teacherName,
+		zk_teacher.teacherNameNo,
+		zk_term.termNo
+	</sql>
+	
+	<sql id="joinRS">
+	zk_my_schedule left join
+	zk_term on  zk_my_schedule.termNo =zk_term.termNo left join
+	zk_term_course on zk_my_schedule.termCourseId = zk_term_course.termCourseId left join 
+	zk_course_teacher_rs on zk_term_course.courseTeacherRSId = zk_course_teacher_rs.courseTeacherRSId left join
+	zk_classroom on zk_term_course.classroomNo =zk_classroom.classroomNo left join 
+	zk_course on zk_course_teacher_rs.cNo = zk_course.cNo left join 
+	zk_teacher on zk_course_teacher_rs.tNo = zk_teacher.tNo
+	</sql>
+	<insert id="addMySchedule" parameterType="com.zhku.bean.MySchedule"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO zk_my_schedule( uId,
+		termNo, termCourseId, state)
+		VALUES (#{uid},#{termNo},#{termCourseId},#{state})
+	</insert>
+
+	<delete id="deleteMySchedule" parameterType="com.zhku.bean.MySchedule">
+		delete from
+		zk_my_schedule where msdId=#{id}
+	</delete>
+
+	<update id="updateMySchedule" parameterType="com.zhku.bean.MySchedule">
+		UPDATE
+		zk_my_schedule
+		SET uId=#{uid},
+		termNo=#{termNo},
+		termCourseId=#{termCourseId},
+		state=#{state}
+		WHERE msdId =#{id}
+	</update>
+
+	<select id="getMyScheduleById" parameterType="_int"
+		resultMap="MySchedule_resultMap">
+		SELECT 
+		<include refid="baseSelectClumm"/>
+		from 
+		<include refid="joinRS"/>
+		where msdId=#{id}
+	</select>
+
+	<select id="getMySchedulesByTermNoAndUid" parameterType="Map"
+		resultMap="MySchedule_resultMap">
+		SELECT 
+		<include refid="baseSelectClumm"/>
+		from 
+		<include refid="joinRS"/>
+		where zk_my_schedule.termNo=#{termNo} and zk_my_schedule.uid=#{uid}
+
+	</select>
+</mapper>

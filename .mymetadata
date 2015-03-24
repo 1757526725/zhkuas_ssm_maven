@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="zhkuas_ssm_maven"
+  id="myeclipse.1406545491924"
+  context-root="/zhkuas"
+  j2ee-spec="6.0"
+  archive="zhkuas_ssm_maven.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+

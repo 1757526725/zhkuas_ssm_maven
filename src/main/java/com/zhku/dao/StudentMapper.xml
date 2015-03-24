@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.StudentMapper">
+
+	<resultMap type="com.zhku.bean.Student" id="StudentResultMap">
+
+		<id column="sId" property="id" />
+		<result column="sNo" property="sNo" />
+		<result column="studentName" property="name" />
+		<result column="studentSex" property="sex" />
+		<association property="classBelongTo" column="classNo"
+			javaType="com.zhku.bean.Student" resultMap="com.zhku.dao.BaseClassMapper.ClassWithCampusAreaResultMap">
+		</association>
+	</resultMap>
+
+	<insert id="addStudent" parameterType="com.zhku.bean.Student"
+		useGeneratedKeys="true" keyProperty="sid">
+		insert into zk_student (sNo, studentName, classNo,studentSex)
+		values(#{sNo},#{name},#{classBelongTo.no},#{sex})
+	</insert>
+
+	<delete id="deleteStudent" parameterType="com.zhku.bean.Student">
+		delete zk_student
+		where sid=#{id}
+	</delete>
+
+	<update id="updateStudent" parameterType="com.zhku.bean.Student">
+		update
+		zk_student
+		SET
+		sNo=#{sNo},stundentName=#{name},classNo=#{classBelongTo.no},studentSex=#{sex}
+		WHERE sId=#{id}
+	</update>
+
+	<select id="getStudentBySno" parameterType="String" resultMap="StudentResultMap">
+		select * from zk_student st left join zk_class zc on
+		st.classNo=zc.classNo where st.sNo=#{sNo}
+	</select>
+	<select id="getStudentById" parameterType="_int" resultMap="StudentResultMap">
+		select * from zk_student st left join zk_class zc on
+		st.classNo=zc.classNo where zc.sId=#{id}
+	</select>
+	<select id="getStudents" resultMap="StudentResultMap">
+		select * from zk_student st
+		left join zk_class zc on
+		st.classNo=zc.classNo
+	</select>
+
+	<select id="getStudentsByPagination" parameterType="com.zhku.bean.Pagination" resultMap="StudentResultMap">
+		select * from zk_student st
+		left join zk_class zc on
+		st.classNo=zc.classNo
+	</select>
+</mapper>

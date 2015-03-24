@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.CourseMapper">
+
+	<resultMap type="com.zhku.bean.Course" id="courseResultMap">
+		<id column="cId" property="id" />
+		<result column="cName" property="name" />
+		<result column="cNo" property="no" />
+		<result column="cEnglishName" property="englishName" />
+		<result column="cNameNo" property="nameNo" />
+		<result column="courseType" property="courseType" />
+		<result column="computerClassHours" property="computerClassHours" />
+		<result column="cCredits" property="credits" />
+		<result column="experimentalHours" property="experimentalHours" />
+		<result column="otherClassHours" property="otherClassHours" />
+		<result column="qualityHours" property="qualityHours" />
+		<result column="teachingHours" property="teachingHours" />
+		<result column="teachingProgram" property="teachingProgram" />
+		<association property="organization" column="organizationNo"
+			javaType="com.zhku.bean.Organization" resultMap="com.zhku.dao.OrganizationMapper.OrganizationResultMap"></association>
+	</resultMap>
+	<resultMap type="com.zhku.bean.Course" id="scheme_courseResultMap"
+		extends="courseResultMap">
+		<association column="cNo" property="courseProfiles"
+			resultMap="com.zhku.dao.PublicCourseProfilesMapper.PublicCourseProfilesResultMap">
+		</association>
+	</resultMap>
+
+
+	<resultMap type="com.zhku.bean.Course" id="public_courseResultMap"
+		extends="courseResultMap">
+		<association column="cNo" property="courseProfiles"
+			resultMap="com.zhku.dao.PublicCourseProfilesMapper.PublicCourseProfilesResultMap">
+		</association>
+		<collection property="commentList" javaType="java.util.List"
+			ofType="com.zhku.bean.PublicCourseComment"
+			resultMap="com.zhku.dao.PublicCourseCommentMapper.PublicCourseComment_resultMap"></collection>
+	</resultMap>
+<sql id="select_base_clumm">
+		zk_course.cId,
+		zk_course.cNo,
+		zk_course.cName,
+		zk_course.cEnglishName,
+		zk_course.organizationNo,
+		zk_course.cNameNo,
+		zk_course.courseType,
+		zk_course.qualityHours,
+		zk_course.cCredits,
+		zk_course.teachingHours,
+		zk_course.experimentalHours,
+		zk_course.computerClassHours,
+		zk_course.otherClassHours,
+		zk_course.teachingProgram,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId	
+</sql>
+	<select id="getCourses" resultMap="courseResultMap">
+		SELECT
+		<include refid="select_base_clumm"/>
+		FROM
+		zk_course left join zk_organization on zk_course.organizationNo = zk_organization.organizationNo
+	</select>
+
+	<select id="getCourseByCno" parameterType="String" resultMap="courseResultMap">
+		SELECT
+		<include refid="select_base_clumm"/>
+		FROM
+		zk_course left join zk_organization on zk_course.organizationNo = zk_organization.organizationNo where zk_course.cNo =#{no}
+	</select>
+	<select id="getCourseByCnameNo" parameterType="String"
+		resultMap="courseResultMap">
+		select * from zk_organization o right join zk_course c on
+		o.organizationNo =c.organizationNo where c.cNameNo=#{nameNo}
+	</select>
+	<select id="getCourseById" parameterType="_int" resultMap="courseResultMap">
+		select * from zk_organization o right join zk_course c on o.organizationNo =c.organizationNo
+		where c.cid=#{id}
+	</select>
+
+	<insert id="addCourse" parameterType="com.zhku.bean.Course" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO zk_course (`cNo`,`cName`, `cEnglishName`, `organizationNo`,`cNameNo`,`courseType`,`qualityHours`,
+             `cCredits`,`teachingHours`,`experimentalHours`,`computerClassHours`,`otherClassHours`,`teachingProgram`)
+		VALUES (#{no},#{name},#{englishName},#{organization.no},#{nameNo},#{courseType},#{qualityHours},#{credits},#{teachingHours},#{experimentalHours},#{computerClassHours},#{otherClassHours},#{teachingProgram})
+	</insert>
+
+	<update id="updateCourse" parameterType="com.zhku.bean.Course">
+		update zk_course set
+		cNo=#{no},
+		cName=#{name},
+		cNameNo=#{nameNo},
+		cEnglishName=#{englishName},
+		organizationId=#{organization.id},
+		cCredits=#{credits},
+		qualityHours=#{qualityHours},
+		teachingHours=#{teachingHours},
+		experimentalHours=#{experimentalHours},
+		computerClassHours=#{computerClassHours},
+		otherClassHours=#{otherClassHours},
+		teachingProgram=#{teachingProgram},
+		courseType=#{courseType}
+		where
+		cid=#{id}
+	</update>
+
+	<delete id="deleteCourse" parameterType="com.zhku.bean.Course">
+		delete from zk_course
+		where cid=#{id}
+	</delete>
+
+	<select id="getCourseWitchDetailByCno" resultMap="public_courseResultMap"
+		parameterType="String">
+		select * from zk_organization o right join zk_course c
+		on o.organizationId =c.organizationId
+		left join zk_public_course_profiles pcp on
+		c.cNo=pcp.cNo left join zk_public_course_type pct on
+		pct.pctid=pcp.pctid
+		left join (SELECT base_cc.pccid as pccid
+		,base_cc.state, base_cc.cNo as parent_cNo,
+		base_cc.content as content
+		,base_cc.parent_pccid as parent_pccid,
+		comment_user.uid as
+		commentUser_id ,
+		comment_user.nickName as
+		commentUser_nickName,
+		comment_user.isDIYAvater as
+		commentUser_isDIYAvater,comment_user.avator_url as
+		commentUser_avator_url, reply_user.uid as replyUser_id,
+		reply_user.nickName as replyUser_nickName,reply_user.isDIYAvater as
+		replyUser_isDIYAvater,reply_user.avator_url as
+		replyUser_avator_url,base_cc.comment_time as
+		comment_time,
+		child_cc.pccid as child_pccid ,child_cc.cNo as child_cNo,
+		child_cc.parent_pccid as child_parent_pccid , child_cc.content as
+		child_content,
+		child_comment_user.uid as child_commentUser_id ,
+		child_comment_user.nickName as
+		child_commentUser_nickName,child_comment_user.isDIYAvater as
+		child_commentUser_isDIYAvater,
+		child_comment_user.avator_url as
+		child_commentUser_avator_url,
+		child_reply_user.uid as
+		child_replyUser_id,
+		child_reply_user.nickName
+		as
+		child_replyUser_nickName,child_reply_user.isDIYAvater
+		as
+		child_replyUser_isDIYAvater,child_reply_user.avator_url as
+		child_replyUser_avator_url,child_cc.comment_time as
+		child_comment_time
+		FROM
+		zk_public_course_comments base_cc left
+		join
+		zk_users comment_user on
+		comment_user.uid =
+		base_cc.comment_uid
+		left join
+		zk_users reply_user on
+		base_cc.reply_uid=reply_user.uid left
+		join
+		zk_public_course_comments
+		child_cc left join zk_users
+		child_comment_user on
+		child_cc.comment_uid=child_comment_user.uid on
+		base_cc.pccid=child_cc.parent_pccid left join zk_users
+		child_reply_user on child_cc.reply_uid=child_reply_user.uid where
+		base_cc.parent_pccid is null or base_cc.parent_pccid=0) zk_comment on
+		c.cNo= zk_comment.parent_cNo
+		where c.cNo=#{no}
+	</select>
+</mapper>

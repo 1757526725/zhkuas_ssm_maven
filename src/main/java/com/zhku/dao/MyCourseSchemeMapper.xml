@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.MyCourseSchemeMapper">
+	<resultMap type="com.zhku.bean.MyCourseScheme" id="MyCourseSchemeResultMap">
+		<id column="msId" property="id" />
+		<result column="cNo" property="cNo" />
+		<result column="uid" property="uid" />
+		<result column="displayValue" property="displayValue" />
+		<result column="formValue" property="formValue" />
+		<result column="orderNum" property="orderNum" />
+		<result column="schoolTime" property="schoolTime" />
+		<association property="course" column="cNo"
+			javaType="com.zhku.bean.Course" resultMap="com.zhku.dao.CourseMapper.scheme_courseResultMap"></association>
+		<association property="term" column="termNo" javaType="com.zhku.bean.Term"
+			resultMap="com.zhku.dao.TermMapper.TermBaseResultMap"></association>
+	</resultMap>
+	<sql id="baseSelectClumm">
+		zk_my_scheme.msId,
+		zk_my_scheme.uId,
+		zk_my_scheme.displayValue,
+		zk_my_scheme.formValue,
+		zk_my_scheme.orderNum,
+		zk_my_scheme.schoolTime,
+		zk_course.cId,
+		zk_course.cName,
+		zk_course.cEnglishName,
+		zk_course.cNameNo,
+		zk_course.courseType,
+		zk_course.qualityHours,
+		zk_course.cCredits,
+		zk_course.teachingHours,
+		zk_course.experimentalHours,
+		zk_course.computerClassHours,
+		zk_course.otherClassHours,
+		zk_course.teachingProgram,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_public_course_profiles.pcpid,
+		zk_public_course_profiles.recommend,
+		zk_public_course_profiles.evaluation,
+		zk_public_course_profiles.good_count,
+		zk_public_course_profiles.bad_count,
+		zk_public_course_type.pctId,
+		zk_public_course_type.publicCourseTypeName,
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.termNo,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_term.status,
+		zk_course.cNo
+	</sql>
+	<sql id="joinRS">
+		zk_my_scheme left join 
+		zk_course on zk_my_scheme.cNo =zk_course.cNo left join 
+		zk_organization on zk_course.organizationNo=zk_organization.organizationNo left join 
+		zk_public_course_profiles  on zk_my_scheme.cNo = zk_public_course_profiles.cNo left join
+		zk_public_course_type on zk_public_course_profiles.pctId = zk_public_course_type.pctId left join 
+		zk_term on zk_term.termNo = zk_my_scheme.termNo
+	</sql>
+	<sql id="orderStyle">
+		order by zk_my_scheme.orderNum,zk_my_scheme.msId
+	</sql>
+	<insert id="addMyCourseScheme" parameterType="com.zhku.bean.MyCourseScheme"
+		useGeneratedKeys="true" keyProperty="msId">
+		INSERT INTO
+		zk_my_scheme(cNo,uid,termNo,displayValue, formValue,schoolTime)
+		VALUES
+		(#{cNo},#{uid},#{term.no},#{displayValue},#{formValue},#{schoolTime})
+	</insert>
+
+	<delete id="deleteMyCourseScheme" parameterType="com.zhku.bean.MyCourseScheme">
+		delete from
+		zk_my_scheme where msId=#{id}
+	</delete>
+	<delete id="deleteSchemesByUid" parameterType="_int">
+		delete from
+		zk_my_scheme where uid=#{uid}
+	</delete>
+	<update id="updateMyCourseScheme" parameterType="com.zhku.bean.MyCourseScheme">
+		update
+		zk_my_scheme
+		set cNo=#{cNo},
+		uid=#{uid},
+		termNo=#{term.no},
+		displayValue=#{displayValue},
+		formValue=#{formValue},
+		orderNum=#{orderNum},
+		schoolTime=#{schoolTime}
+		where msId=#{id}
+	</update>
+
+	<update id="updateOrdeNumOfMyCourseScheme" parameterType="Map">
+		update
+		zk_my_scheme
+		set orderNum=#{orderNum}
+		where msId=#{id}
+	</update>
+
+	<select id="getMyCourseSchemesByTermNoAndUid" parameterType="Map"
+		resultMap="MyCourseSchemeResultMap">
+		select
+		<include refid="baseSelectClumm"/>
+		from
+		<include refid="joinRS"/>
+		where
+		zk_my_scheme.termNo=#{termNo} and zk_my_scheme.uid=#{uid}
+		<include refid="orderStyle"/>
+	</select>
+
+	<select id="getMyCourseSchemeById" parameterType="_int"
+		resultMap="MyCourseSchemeResultMap">
+		select
+		<include refid="baseSelectClumm"/>
+			from
+		<include refid="joinRS"/>
+		where zk_my_scheme.msId=#{id}
+	</select>
+
+	<select id="getMyCourseSchemesByUid" parameterType="_int"
+		resultMap="MyCourseSchemeResultMap">
+		select
+		<include refid="baseSelectClumm"/>
+			from
+		<include refid="joinRS"/>
+		where zk_my_scheme.uid=#{uid}
+		<include refid="orderStyle"/>
+	</select>
+
+	<select id="findMyCourseScheme" parameterType="com.zhku.bean.MyCourseScheme"
+		resultMap="MyCourseSchemeResultMap">
+		select
+		<include refid="baseSelectClumm"/>
+			from
+		<include refid="joinRS"/>
+		where zk_my_scheme.termNo=#{term.no} and zk_my_scheme.cNo =#{cNo} and zk_my_scheme.uid=#{uid}
+	</select>
+</mapper>

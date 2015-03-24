@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.TermMapper">
+
+	<resultMap type="com.zhku.bean.Term" id="TermBaseResultMap">
+		<id column="termId" property="id" />
+		<result column="termName" property="name" />
+		<result column="termNo" property="no" />
+		<result column="beginDate" property="beginDate" javaType="java.util.Date"
+			jdbcType="DATE" />
+		<result column="endDate" property="endDate" javaType="java.util.Date"
+			jdbcType="DATE" />
+	</resultMap>
+	<resultMap type="com.zhku.bean.Term" id="TermResultMap"
+		extends="TermBaseResultMap">
+		<result column="wConfigId" property="isCurrent" javaType="boolean" />
+	</resultMap>
+	<sql id="base_selet_list">
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.termNo,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_web_config.wConfigId
+	</sql>
+
+	<insert id="addTerm" parameterType="com.zhku.bean.Term"
+		useGeneratedKeys="true" keyProperty="termId">
+		insert into
+		zk_term(termNo,termName,beginDate,endDate) values(
+		#{no},#{name},#{beginDate},#{endDate})
+	</insert>
+
+	<delete id="deleteTerm" parameterType="com.zhku.bean.Term">
+		delete from
+		zk_term where
+		termId=#{id}
+	</delete>
+	<delete id="deleteTerms" parameterType="java.lang.reflect.Array" >
+		delete from
+		zk_term where termNo in
+		<foreach collection="array" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<update id="updateTerm" parameterType="com.zhku.bean.Term">
+		update
+		zk_term set
+		termName=#{name},termNo=#{no},beginDate=#{beginDate},endDate=#{endDate},status=#{status}
+		where termId=#{id}
+	</update>
+
+	<select id="getTermById" parameterType="_int" resultMap="TermResultMap">
+		select
+		<include refid="base_selet_list" />
+		from zk_term left join zk_web_config on
+		zk_term.termNo=zk_web_config.termNo where termId=#{id}
+	</select>
+	<select id="getTermByNo" parameterType="String" resultMap="TermResultMap">
+		select
+		<include refid="base_selet_list" />
+		from zk_term left join zk_web_config on
+		zk_term.termNo=zk_web_config.termNo where zk_term.termNo=#{no}
+	</select>
+	<select id="getTermByFullName" parameterType="String" resultMap="TermResultMap">
+		select
+		<include refid="base_selet_list" />
+		from zk_term left join zk_web_config on
+		zk_term.termNo=zk_web_config.termNo where zk_term.termName=#{name}
+	</select>
+	<select id="getTermsByYear" parameterType="String" resultMap="TermResultMap">
+		select
+		<include refid="base_selet_list" />
+		from zk_term where termNo left join zk_web_config on
+		zk_term.termNo=zk_web_config.termNo like '${_parameter}%'
+	</select>
+	<select id="getTerms" resultMap="TermResultMap">
+		select
+		<include refid="base_selet_list" />
+		from zk_term left join zk_web_config on
+		zk_term.termNo=zk_web_config.termNo order by beginDate
+	</select>
+	<select id="getAvailabelTerms" resultMap="TermResultMap">
+		select
+		<include refid="base_selet_list" />
+		from zk_term left join zk_web_config on
+		zk_term.termNo=zk_web_config.termNo where zk_term.status = 1 order by beginDate desc
+	</select>
+		<select id="getCurrentTerm" resultMap="TermResultMap">
+		select
+		<include refid="base_selet_list" />
+		from  zk_web_config  left join zk_term  on
+		zk_term.termNo=zk_web_config.termNo where zk_term.status = 1 
+	</select>
+	
+</mapper>

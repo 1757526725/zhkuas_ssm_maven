@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.MyPublicCourseMapper">
+	<resultMap type="com.zhku.bean.MyPublicCourse" id="MyPublicCourseResultMap">
+		<id column="mpcId" property="id" />
+		<result column="uid" property="uid" />
+		<result column="score" property="score" />
+		<association property="term" column="termNo" javaType="com.zhku.bean.Term"
+			resultMap="com.zhku.dao.TermMapper.TermBaseResultMap"></association>
+		<association property="course" column="pcp.cNo" javaType="com.zhku.bean.Course"
+			resultMap="com.zhku.dao.CourseMapper.scheme_courseResultMap"></association>
+	</resultMap>
+	 <sql id="select_base_sql">
+	 	SELECT
+		zk_my_public_course.mpcId,
+		zk_my_public_course.uId,
+		zk_my_public_course.score,
+		zk_course.cId,
+		zk_course.cNo,
+		zk_course.cName,
+		zk_course.cEnglishName,
+		zk_course.courseType,
+		zk_course.qualityHours,
+		zk_course.cCredits,
+		zk_course.teachingHours,
+		zk_course.experimentalHours,
+		zk_course.computerClassHours,
+		zk_course.otherClassHours,
+		zk_course.teachingProgram,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_public_course_profiles.pcpId,
+		zk_public_course_profiles.recommend,
+		zk_public_course_profiles.evaluation,
+		zk_public_course_profiles.good_count,
+		zk_public_course_profiles.bad_count,
+		zk_public_course_type.pctId,
+		zk_public_course_type.publicCourseTypeName,
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.termNo,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_term.status,
+		zk_course.cNameNo
+		FROM
+		zk_my_public_course left join 
+		zk_course on zk_my_public_course.cNameNo=zk_course.cNameNo left join 
+		zk_organization on zk_course.organizationNo = zk_organization.organizationNo left join
+		zk_public_course_profiles on zk_course.cNo=zk_public_course_profiles.cNo left join 
+		zk_public_course_type on zk_public_course_profiles.pctId = zk_public_course_type.pctId left join 
+		zk_term on zk_my_public_course.termNo = zk_term.termNo
+	 </sql>
+	<insert id="addMyPublicCouse" parameterType="com.zhku.bean.MyPublicCourse"
+		useGeneratedKeys="true" keyProperty="mpcid">
+		INSERT INTO zk_my_public_course
+		(uid, termNo, cNameNo, score) 
+		VALUES (#{uid},#{term.no},#{cNameNo},#{score})
+	</insert>
+
+	<delete id="deleteMyPublicCouse" parameterType="com.zhku.bean.MyPublicCourse">
+		DELETE FROM zk_my_public_course WHERE mpcid=#{id}
+	</delete>
+	
+	<update id="updateMyPublicCouse" parameterType="com.zhku.bean.MyPublicCourse">
+		UPDATE zk_my_public_course 
+		SET uid=#{uid},
+		termNo=#{term.no},
+		cNameNo=#{cNameNo},
+		score=#{score} 
+		WHERE mpcid=#{id}
+	</update>
+
+	<select id="getMyPublicCouseById" parameterType="_int" resultMap="MyPublicCourseResultMap">
+		<include refid="select_base_sql"></include>
+		where zk_my_public_course.mpcid=#{mpcid}
+	</select>
+	
+	<select id="getMyPublicCoursesByUid" parameterType="_int" resultMap="MyPublicCourseResultMap">
+		<include refid="select_base_sql"></include>
+		where zk_my_public_course.uid=#{uid}
+		order by zk_public_course_type.pctId
+	</select>
+
+	<select id="getMyPublicCouseByCNameNoAndUid" parameterType="Map" resultMap="MyPublicCourseResultMap">
+		<include refid="select_base_sql"></include>
+		where zk_my_public_course.cNameNo=#{cNameNo} and zk_my_public_course.uid=#{uid}
+	</select>
+</mapper>

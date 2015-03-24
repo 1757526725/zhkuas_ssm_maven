@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.PublicCourseCommentMapper">
+	<resultMap type="com.zhku.bean.User" id="child_commentUser_resultMap">
+		<id column="child_commentUser_id" property="uid" />
+		<result column="child_commentUser_avator_url" property="avator_url" />
+		<result column="child_commentUser_nickName" property="nickName" />
+		<result column="child_commentUser_isDIYAvater" property="isDIYAvater" />
+	</resultMap>
+
+	<resultMap type="com.zhku.bean.User" id="child_replyUser_resultMap">
+		<id column="child_replyUser_id" property="uid" />
+		<result column="child_replyUser_avator_url" property="avator_url" />
+		<result column="child_replyUser_nickName" property="nickName" />
+		<result column="child_replyUser_isDIYAvater" property="isDIYAvater" />
+	</resultMap>
+
+	<resultMap type="com.zhku.bean.User" id="commentUser_resultMap">
+		<id column="commentUser_id" property="uid" />
+		<result column="commentUser_avator_url" property="avator_url" />
+		<result column="commentUser_nickName" property="nickName" />
+		<result column="commentUser_isDIYAvater" property="isDIYAvater" />
+	</resultMap>
+
+	<resultMap type="com.zhku.bean.User" id="replyUser_resultMap">
+		<id column="replyUser_id" property="uid" />
+		<result column="replyUser_avator_url" property="avator_url" />
+		<result column="replyUser_nickName" property="nickName" />
+		<result column="replyUser_isDIYAvater" property="isDIYAvater" />
+	</resultMap>
+
+	<resultMap type="com.zhku.bean.PublicCourseComment" id="PublicCourseComment_child_resultMap">
+		<id column="child_pccid" property="id" />
+		<result column="child_cNo" property="cNo" />
+		<result column="child_content" property="content" />
+		<result column="child_parent_pccid" property="parentId" />
+		<result column="child_comment_time" property="comment_time" />
+		<association property="replyUser" resultMap="child_replyUser_resultMap"></association>
+		<association property="commentUser" resultMap="child_commentUser_resultMap"></association>
+
+	</resultMap>
+	<resultMap type="com.zhku.bean.PublicCourseComment" id="PublicCourseComment_resultMap">
+		<id column="pccid" property="pccid" />
+		<result column="parent_cNo" property="cNo" />
+		<result column="content" property="content" />
+		<result column="parent_pccid" property="parentId" />
+		<result column="comment_time" property="comment_time" />
+		<result column="courseName" property="courseName" />
+		<result column="state" property="state" />
+		<association property="commentUser" resultMap="commentUser_resultMap"></association>
+
+		<association property="replyUser" resultMap="replyUser_resultMap"></association>
+
+		<collection property="commentChilds" javaType="java.util.List"
+			ofType="com.zhku.bean.PublicCourseComment" resultMap="PublicCourseComment_child_resultMap"></collection>
+	</resultMap>
+	<insert id="addPublicCourseComment" parameterType="com.zhku.bean.PublicCourseComment"
+		useGeneratedKeys="true" keyColumn="pccid">
+		INSERT INTO
+		zk_public_course_comments( parent_pccid, comment_uid, cNo, content,
+		reply_uid)
+		VALUES
+		(#{parentId},#{commentUser.uid},#{cNo},#{content},#{replyUser.uid})
+	</insert>
+
+	<delete id="deletePublicCourseComment" parameterType="com.zhku.bean.PublicCourseComment">
+		DELETE FROM
+		zk_public_course_comments WHERE pccid=#{id}
+	</delete>
+	<update id="updatePublicCourseComment" parameterType="com.zhku.bean.PublicCourseComment">
+	UPDATE zk_public_course_comments 
+	SET parent_pccid=#{parentId},
+	comment_uid=#{commentUser.uid},
+	cNo=#{cNo},content=#{content},reply_uid=#{replyUser.uid}
+	,comment_time=#{commentTime},state=#{state} WHERE pccid=#{id}
+	
+	</update>
+	<select id="getPublicCourseCommetById" parameterType="_int"
+		resultMap="PublicCourseComment_resultMap">
+		SELECT zc.cName as courseName ,base_cc.state,base_cc.pccid as pccid , base_cc.cNo as parent_cNo,
+		base_cc.content as content ,base_cc.parent_pccid as parent_pccid,
+		comment_user.uid as commentUser_id ,
+		comment_user.nickName as
+		commentUser_nickName,
+		comment_user.isDIYAvater as
+		commentUser_isDIYAvater,comment_user.avator_url as
+		commentUser_avator_url, reply_user.uid as replyUser_id
+		,
+		reply_user.nickName as replyUser_nickName,reply_user.isDIYAvater as
+		replyUser_isDIYAvater,reply_user.avator_url as
+		replyUser_avator_url,base_cc.comment_time as
+		comment_time,
+
+		child_cc.pccid as child_pccid ,child_cc.cNo as child_cNo,
+		child_cc.parent_pccid as child_parent_pccid , child_cc.content as
+		child_content,
+		child_comment_user.uid as child_commentUser_id ,
+		child_comment_user.nickName as
+		child_commentUser_nickName,child_comment_user.isDIYAvater as
+		child_commentUser_isDIYAvater,
+		child_comment_user.avator_url as
+		child_commentUser_avator_url,
+		child_reply_user.uid as
+		child_replyUser_id,
+		child_reply_user.nickName
+		as
+		child_replyUser_nickName,child_reply_user.isDIYAvater
+		as
+		child_replyUser_isDIYAvater,child_reply_user.avator_url as
+		child_replyUser_avator_url,child_cc.comment_time as
+		child_comment_time
+		FROM
+
+		zk_public_course_comments base_cc left
+		join
+		zk_users comment_user on
+		comment_user.uid =
+		base_cc.comment_uid
+		left join
+		zk_users reply_user on
+		base_cc.reply_uid=reply_user.uid left
+		join
+		zk_public_course_comments
+		child_cc left join zk_users
+		child_comment_user on
+		child_cc.comment_uid=child_comment_user.uid on
+		base_cc.pccid=child_cc.parent_pccid left join zk_users
+		child_reply_user on child_cc.reply_uid=child_reply_user.uid left join zk_course zc on zc.cNo =base_cc.cNo where
+		base_cc.pccid=#{id}
+	</select>
+	
+	<select id="getPublicCourseCommentsByUid" parameterType="_int"
+		resultMap="PublicCourseComment_resultMap">
+		SELECT zc.cName as courseName ,base_cc.state,base_cc.pccid as pccid , base_cc.cNo as parent_cNo,
+		base_cc.content as content ,base_cc.parent_pccid as parent_pccid,
+		comment_user.uid as commentUser_id ,
+		comment_user.nickName as
+		commentUser_nickName,
+		comment_user.isDIYAvater as
+		commentUser_isDIYAvater,comment_user.avator_url as
+		commentUser_avator_url, reply_user.uid as replyUser_id
+		,
+		reply_user.nickName as replyUser_nickName,reply_user.isDIYAvater as
+		replyUser_isDIYAvater,reply_user.avator_url as
+		replyUser_avator_url,base_cc.comment_time as
+		comment_time,
+		child_cc.pccid as child_pccid ,child_cc.cNo as child_cNo,
+		child_cc.parent_pccid as child_parent_pccid , child_cc.content as
+		child_content,
+		child_comment_user.uid as child_commentUser_id ,
+		child_comment_user.nickName as
+		child_commentUser_nickName,child_comment_user.isDIYAvater as
+		child_commentUser_isDIYAvater,
+		child_comment_user.avator_url as
+		child_commentUser_avator_url,
+		child_reply_user.uid as
+		child_replyUser_id,
+		child_reply_user.nickName
+		as
+		child_replyUser_nickName,child_reply_user.isDIYAvater
+		as
+		child_replyUser_isDIYAvater,child_reply_user.avator_url as
+		child_replyUser_avator_url,child_cc.comment_time as
+		child_comment_time
+		FROM
+		zk_public_course_comments base_cc left
+		join
+		zk_users comment_user on
+		comment_user.uid =
+		base_cc.comment_uid
+		left join
+		zk_users reply_user on
+		base_cc.reply_uid=reply_user.uid left
+		join
+		zk_public_course_comments
+		child_cc left join zk_users
+		child_comment_user on
+		child_cc.comment_uid=child_comment_user.uid on
+		base_cc.pccid=child_cc.parent_pccid left join zk_users
+		child_reply_user on child_cc.reply_uid=child_reply_user.uid left join zk_course zc on zc.cNo =base_cc.cNo 
+		where comment_user.uid=#{uid} and base_cc.state!=2 order by base_cc.comment_time desc
+	</select>
+	
+	<select id="getPublicCourseCommentReplyByUid" parameterType="_int"
+		resultMap="PublicCourseComment_resultMap">
+		SELECT zc.cName as courseName ,base_cc.state,base_cc.pccid as pccid , base_cc.cNo as parent_cNo,
+		base_cc.content as content ,base_cc.parent_pccid as parent_pccid,
+		comment_user.uid as commentUser_id ,
+		comment_user.nickName as
+		commentUser_nickName,
+		comment_user.isDIYAvater as
+		commentUser_isDIYAvater,comment_user.avator_url as
+		commentUser_avator_url, reply_user.uid as replyUser_id
+		,
+		reply_user.nickName as replyUser_nickName,reply_user.isDIYAvater as
+		replyUser_isDIYAvater,reply_user.avator_url as
+		replyUser_avator_url,base_cc.comment_time as
+		comment_time,
+
+		child_cc.pccid as child_pccid ,child_cc.cNo as child_cNo,
+		child_cc.parent_pccid as child_parent_pccid , child_cc.content as
+		child_content,
+		child_comment_user.uid as child_commentUser_id ,
+		child_comment_user.nickName as
+		child_commentUser_nickName,child_comment_user.isDIYAvater as
+		child_commentUser_isDIYAvater,
+		child_comment_user.avator_url as
+		child_commentUser_avator_url,
+		child_reply_user.uid as
+		child_replyUser_id,
+		child_reply_user.nickName
+		as
+		child_replyUser_nickName,child_reply_user.isDIYAvater
+		as
+		child_replyUser_isDIYAvater,child_reply_user.avator_url as
+		child_replyUser_avator_url,child_cc.comment_time as
+		child_comment_time
+		FROM
+
+		zk_public_course_comments base_cc left
+		join
+		zk_users comment_user on
+		comment_user.uid =
+		base_cc.comment_uid
+		left join
+		zk_users reply_user on
+		base_cc.reply_uid=reply_user.uid left
+		join
+		zk_public_course_comments
+		child_cc left join zk_users
+		child_comment_user on
+		child_cc.comment_uid=child_comment_user.uid on
+		base_cc.pccid=child_cc.parent_pccid left join zk_users
+		child_reply_user on child_cc.reply_uid=child_reply_user.uid left join zk_course zc on zc.cNo =base_cc.cNo 
+		left join zk_public_course_comments zpccp on base_cc.parent_pccid =zpccp.pccid
+		where reply_user.uid=#{uid} or zpccp.comment_uid =#{uid} order by base_cc.comment_time desc
+	</select>
+	
+	<select id="getPublicCourseCommentUnreadByUid" parameterType="_int"
+		resultMap="PublicCourseComment_resultMap">
+		SELECT zc.cName as courseName ,base_cc.state,base_cc.pccid as pccid , base_cc.cNo as parent_cNo,
+		base_cc.content as content ,base_cc.parent_pccid as parent_pccid,
+		comment_user.uid as commentUser_id ,
+		comment_user.nickName as
+		commentUser_nickName,
+		comment_user.isDIYAvater as
+		commentUser_isDIYAvater,comment_user.avator_url as
+		commentUser_avator_url, reply_user.uid as replyUser_id
+		,
+		reply_user.nickName as replyUser_nickName,reply_user.isDIYAvater as
+		replyUser_isDIYAvater,reply_user.avator_url as
+		replyUser_avator_url,base_cc.comment_time as
+		comment_time,
+
+		child_cc.pccid as child_pccid ,child_cc.cNo as child_cNo,
+		child_cc.parent_pccid as child_parent_pccid , child_cc.content as
+		child_content,
+		child_comment_user.uid as child_commentUser_id ,
+		child_comment_user.nickName as
+		child_commentUser_nickName,child_comment_user.isDIYAvater as
+		child_commentUser_isDIYAvater,
+		child_comment_user.avator_url as
+		child_commentUser_avator_url,
+		child_reply_user.uid as
+		child_replyUser_id,
+		child_reply_user.nickName
+		as
+		child_replyUser_nickName,child_reply_user.isDIYAvater
+		as
+		child_replyUser_isDIYAvater,child_reply_user.avator_url as
+		child_replyUser_avator_url,child_cc.comment_time as
+		child_comment_time
+		FROM
+
+		zk_public_course_comments base_cc left
+		join
+		zk_users comment_user on
+		comment_user.uid =
+		base_cc.comment_uid
+		left join
+		zk_users reply_user on
+		base_cc.reply_uid=reply_user.uid left
+		join
+		zk_public_course_comments
+		child_cc left join zk_users
+		child_comment_user on
+		child_cc.comment_uid=child_comment_user.uid on
+		base_cc.pccid=child_cc.parent_pccid left join zk_users
+		child_reply_user on child_cc.reply_uid=child_reply_user.uid left join zk_course zc on zc.cNo =base_cc.cNo 
+		left join zk_public_course_comments zpccp on base_cc.parent_pccid =zpccp.pccid
+		where (reply_user.uid=#{uid} or zpccp.comment_uid =#{uid}) and base_cc.state=0
+	</select>
+</mapper>

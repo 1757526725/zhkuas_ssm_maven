@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.OrganizationMapper">
+
+	<resultMap type="com.zhku.bean.Organization" id="OrganizationResultMap">
+		<id column="oId" property="id" />
+		<result column="organizationName" property="name" />
+		<result column="organizationNo" property="no" />
+		<result column="organizationTypeId" property="typeId" />
+	</resultMap>
+	<sql id="academy_base_selet_list">
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_major.mId,
+		zk_major.majorName,
+		zk_major.majorNo,
+		zk_major.academyNo
+	</sql>
+	<resultMap type="com.zhku.bean.Academy" id="AcademyBaseResultMap" extends="OrganizationResultMap">
+	</resultMap>
+	<resultMap type="com.zhku.bean.Academy" id="AcademyResultMap" extends="OrganizationResultMap">
+		<collection property="majorList" javaType="java.util.List" column="academyNo" ofType="com.zhku.bean.Major" resultMap="com.zhku.dao.MajorMapper.MajorBaseResultMap">
+		</collection>
+	</resultMap>
+	
+	<insert id="addAcademy" parameterType="com.zhku.bean.Academy" useGeneratedKeys="true" keyProperty="id" >
+		insert into
+		zk_organization(organizationName,organizationNo,organizationTypeId) values(#{name},#{no},#{typeId})
+	</insert>
+	
+	<insert id="addOrganization" parameterType="com.zhku.bean.Organization"
+		useGeneratedKeys="true" keyProperty="id" >
+		insert into
+		zk_organization(organizationName,organizationNo,organizationTypeId) values( #{name},#{no},#{typeId})
+	</insert>
+	
+	<delete id="deleteAcademy" parameterType="com.zhku.bean.Academy">
+		delete from
+		zk_organization where oId=#{id}
+	</delete>
+
+	<update id="updateAcademy" parameterType="com.zhku.bean.Academy">
+		update
+		zk_organization set organizationName=#{name},organizationNo=#{no},organizationTypeId={#typeId} where oId=#{id}
+	</update>
+	<update id="updateOrganization" parameterType="com.zhku.bean.Organization">
+		update
+		zk_organization set organizationName=#{name},organizationNo=#{no},organizationTypeId={#typeId} where oId=#{id}
+	</update>
+	<select id="getAcademyById" parameterType="_int"
+		resultMap="AcademyResultMap">
+		 SELECT
+		<include refid="academy_base_selet_list" />
+		FROM
+		zk_organization  left join zk_major on zk_organization.organizationNo =zk_major.academyNo 
+		where zk_organization.organizationTypeId=1 and zk_organization.oId=#{id}
+	</select>
+
+	<select id="getAcademys" resultMap="AcademyResultMap">
+		SELECT
+		<include refid="academy_base_selet_list" />
+		FROM
+		zk_organization  left join zk_major on zk_organization.organizationNo =zk_major.academyNo 
+		where zk_organization.organizationTypeId=1
+	</select>
+	<select id="getOrganizations" resultMap="OrganizationResultMap">
+		select * from
+		zk_organization;
+	</select>
+	<select id="getAcademyByNo"  parameterType="String"  resultMap="AcademyResultMap">
+		SELECT
+		<include refid="academy_base_selet_list" />
+		FROM
+		zk_organization  left join zk_major on zk_organization.organizationNo =zk_major.academyNo 
+		where zk_organization.organizationTypeId=1 and zk_organization.organizationNo=#{no}
+	</select>
+	<select id="getOrganizationByNo" parameterType="String" resultType="com.zhku.bean.Organization">
+		select * from
+		zk_organization where organizationNo=#{no}
+	</select>
+	<select id="getOrganizationByName" parameterType="String"  resultMap="OrganizationResultMap">
+		SELECT * FROM
+		zk_organization where organizationName=#{name};
+	</select>
+	<select id="getAcademyByName" parameterType="String"  resultMap="AcademyResultMap">
+		SELECT
+		<include refid="academy_base_selet_list" />
+		FROM
+		zk_organization  left join zk_major on zk_organization.organizationNo =zk_major.academyNo 
+		where zk_organization.organizationTypeId=1 and organizationName=#{name};
+	</select>
+	<select id="getDefaultNo" resultType="String">
+		SELECT max(organizationNo) FROM
+		zk_organization where organizationTypeId=1;
+	</select>
+
+</mapper>

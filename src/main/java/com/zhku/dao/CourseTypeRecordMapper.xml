@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.CourseTypeRecordMapper">
+
+	<resultMap type="com.zhku.bean.CourseTypeRecord" id="courseTypeRecordResultMap">
+		<id column="tctId" property="id"/>
+		<result column="cName" property="cName"/>
+		<result column="pctId" property="pctId"/>
+	</resultMap>
+	<select id="getCourseTypeRecordByCName" parameterType="String" resultMap="courseTypeRecordResultMap">
+		SELECT * FROM zk_temp_coursetype WHERE cName=#{cName}
+	</select>
+</mapper>

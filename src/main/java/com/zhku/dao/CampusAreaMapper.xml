@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.CampusAreaMapper">
+
+	<resultMap type="com.zhku.bean.CampusArea" id="CampusAreaBaseResultMap">
+		<id column="campusId" property="id" />
+		<result column="campusName" property="name" />
+	</resultMap>
+	<resultMap type="com.zhku.bean.CampusArea" id="CampusAreaWithBuildingResultMap"
+		extends="CampusAreaBaseResultMap">
+		<collection property="buildingList" column="buildingNo"
+			resultMap="com.zhku.dao.SchoolBuildingMapper.SchoolBuildingBaseResultMap"></collection>
+	</resultMap>
+	<resultMap type="com.zhku.bean.CampusArea" id="CampusAreaFullResultMap"
+		extends="CampusAreaBaseResultMap">
+
+	</resultMap>
+
+	<insert id="addCampusArea" parameterType="com.zhku.bean.CampusArea">
+		insert into
+		zk_campus(campusId,campusName) values( #{id},#{name})
+	</insert>
+
+	<delete id="deleteCampusArea" parameterType="com.zhku.bean.CampusArea">
+		delete from
+		zk_campus where campusId=#{id}
+	</delete>
+
+	<update id="updateCampusArea" parameterType="com.zhku.bean.CampusArea">
+		update
+		zk_campus set
+		campusName=#{name} where campusId=#{id}
+	</update>
+
+	<select id="getCampusAreaById" parameterType="_int"
+		resultMap="CampusAreaBaseResultMap">
+		select * from zk_campus where campusId=#{id}
+	</select>
+
+	<select id="getCampusAreaWithBuildingListById" parameterType="_int"
+		resultMap="CampusAreaWithBuildingResultMap">
+		SELECT
+		zk_campus.campusId,
+		zk_campus.campusName,
+		zk_school_building.sbId,
+		zk_school_building.schoolBuildingName,
+		zk_school_building.schoolBuildingNo
+		FROM
+		zk_campus left join
+		zk_school_building on zk_campus.campusId = zk_school_building.campusId where
+		zk_campus.campusId=#{id}
+	</select>
+	<select id="getCampusAreas" resultMap="CampusAreaBaseResultMap">
+		select * from
+		zk_campus
+	</select>
+	<select id="getCampusAreasWithSubData" resultMap="CampusAreaBaseResultMap">
+		select * from
+		zk_campus
+	</select>
+</mapper>

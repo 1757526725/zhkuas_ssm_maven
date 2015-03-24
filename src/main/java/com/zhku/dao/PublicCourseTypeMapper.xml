@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.PublicCourseTypeMapper">
+	<resultMap type="com.zhku.bean.PublicCourseType" id="PublicCourseTypeResultMap">
+		<id column="pctId" property="id" />
+		<result column="publicCourseTypeName" property="name" />
+	</resultMap>
+	
+	<select id="getPublicCourseTypeById" parameterType="_int" resultMap="PublicCourseTypeResultMap">
+		select * from zk_public_course_type where pctId =#{id}
+	</select>
+	
+</mapper>

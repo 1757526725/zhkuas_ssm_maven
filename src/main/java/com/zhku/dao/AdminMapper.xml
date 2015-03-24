@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.AdminMapper">
+	<resultMap type="com.zhku.bean.Admin" id="AdminResultMap">
+		<id column="adminId" property="id" />
+		<result column="adminName" property="username" />
+		<result column="adminPwd" property="password" />
+		<association property="user" column="uId" javaType="com.zhku.bean.User"
+			resultMap="com.zhku.dao.UserMapper.UserResultMap"></association>
+	</resultMap>
+
+	<insert id="addAdmin" parameterType="com.zhku.bean.Admin" useGeneratedKeys="true"
+		keyProperty="adminId">
+		insert into zk_admin(uId, adminName,adminPwd)
+		values(#{user.uid},#{username},#{password})
+	</insert>
+
+	<delete id="deleteAdmin" parameterType="com.zhku.bean.Admin">
+		delete zk_admin where
+		adminId=#{id}
+	</delete>
+
+	<update id="updateAdmin" parameterType="com.zhku.bean.Admin">
+		UPDATE zk_admin SET
+		uId=#{user.uid},adminName=#{username},adminPwd=#{password}
+		WHERE adminId=#{id}
+	</update>
+
+	<select id="findAdmin" parameterType="com.zhku.bean.Admin" resultMap="AdminResultMap">
+		select *
+		from zk_admin ad left join zk_user u on ad.uId=u.uId left join zk_student st on u.sNo=st.sNo left join
+		zk_class zc on
+		st.classNo=zc.classNo where ad.adminName = #{username} and ad.adminPwd = #{password}
+	</select>
+	<select id="getAdminUserBySinaUid" parameterType="String" resultMap="AdminResultMap">
+		select * from  zk_admin a  left join zk_user u on  u.uId=a.uId left join zk_student st on u.sNo=st.sNo left
+		join zk_class zc on
+		st.classNo=zc.classNo where sinaUid=#{sinaUid}
+	</select>
+</mapper>

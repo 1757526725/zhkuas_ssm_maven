@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.PublicCourseMapper">
+
+
+	<resultMap type="com.zhku.bean.PublicCourse" id="PublicCourseResultMap">
+		<id column="pcid" property="id" />
+		<result column="availableNum" property="availableNum" />
+		<result column="campusId" property="campusId" />
+		<association column="termCourseId" property="termCourse"
+			resultMap="com.zhku.dao.TermCourseMapper.termCourseResultMap"></association>
+	</resultMap>
+	<sql id="baseSelectClumm">
+		zk_public_course.pcId,
+		zk_public_course.termCourseId,
+		zk_public_course.campusId,
+		zk_public_course.availableNum,
+		zk_term_course.termCourseId,
+		zk_term_course.termNo,
+		zk_term_course.courseTeacherRSId,
+		zk_term_course.courseClassNo,
+		zk_term_course.studentNum,
+		zk_term_course.periods,
+		zk_term_course.classWeek,
+		zk_term_course.classSection,
+		zk_term_course.classroomNo,
+		zk_course_teacher_rs.cNo,
+		zk_course_teacher_rs.tNo,
+		zk_classroom.classroomId,
+		zk_classroom.classroomName,
+		zk_classroom.schoolBuildingNo,
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_term.status,
+		zk_course.cId,
+		zk_course.cName,
+		zk_course.cEnglishName,
+		zk_course.organizationNo,
+		zk_course.cNameNo,
+		zk_course.courseType,
+		zk_course.qualityHours,
+		zk_course.cCredits,
+		zk_course.teachingHours,
+		zk_course.experimentalHours,
+		zk_course.computerClassHours,
+		zk_course.otherClassHours,
+		zk_course.teachingProgram,
+		zk_teacher.tId,
+		zk_teacher.teacherName,
+		zk_teacher.teacherNameNo,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_public_course_type.pctId,
+		zk_public_course_type.publicCourseTypeName,
+		zk_public_course_profiles.pcpId,
+		zk_public_course_profiles.evaluation,
+		zk_public_course_profiles.good_count,
+		zk_public_course_profiles.bad_count
+	</sql>
+	<sql id="joinRS">
+		zk_public_course
+		Left Join zk_term_course ON zk_public_course.termCourseId = zk_term_course.termCourseId
+		Left Join zk_course_teacher_rs ON zk_term_course.courseTeacherRSId = zk_course_teacher_rs.courseTeacherRSId
+		Left Join zk_classroom ON zk_term_course.classroomNo = zk_classroom.classroomNo
+		Left Join zk_term ON zk_term_course.termNo = zk_term.termNo
+		Left Join zk_course ON zk_course_teacher_rs.cNo = zk_course.cNo
+		Left Join zk_teacher ON zk_course_teacher_rs.tNo = zk_teacher.tNo
+		Left Join zk_organization ON zk_course.organizationNo = zk_organization.organizationNo left  join 
+		zk_public_course_profiles on  zk_public_course_profiles.cNo = zk_course_teacher_rs.cNo left  join 
+		zk_public_course_type on zk_public_course_profiles.pctId =zk_public_course_type.pctId
+	</sql>
+	<insert id="addPublicCourse" parameterType="com.zhku.bean.PublicCourse"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		zk_public_course(termCourseId,campusId)
+		values(#{termCourse.id},#{campusId})
+	</insert>
+
+	<delete id="deletePublicCourse" parameterType="com.zhku.bean.PublicCourse">
+		delete
+		zk_public_course where pcId=#{id}
+	</delete>
+
+	<select id="getPublicCoursesBytermNoAndCompusId" parameterType="Map"
+		resultMap="PublicCourseResultMap">
+		SELECT
+		<include refid="baseSelectClumm" />
+		from
+		<include refid="joinRS"/>
+		where zk_term_course.termNo = #{termNo} and zk_public_course.campusId = #{campusId}
+	</select>
+
+	<select id="getPublicCoursesBytermNoAndCompusIdAndTypeId"
+		parameterType="Map" resultMap="PublicCourseResultMap">
+		SELECT
+		<include refid="baseSelectClumm" />
+		from
+		<include refid="joinRS"/>
+		where zk_term_course.termNo = #{termNo} and zk_public_course.campusId = #{campusId} and zk_public_course_type.pctId = #{pctId}
+		order by zk_course.cNo
+	</select>
+	<select id="getPublicCourseById" parameterType="_int"
+		resultMap="PublicCourseResultMap">
+		SELECT
+		<include refid="baseSelectClumm" />
+		from
+		<include refid="joinRS"/>
+		where zk_public_course.pcId = #{id}
+	</select>
+
+	<select id="getPublicCourseByTermCourseAndCompusId"
+		parameterType="Map" resultMap="PublicCourseResultMap">
+		SELECT
+		<include refid="baseSelectClumm" />
+		from
+		<include refid="joinRS"/>
+		where zk_public_course.termCourseId = #{termCourseId} and zk_public_course.campusId= #{campusId}
+		order by zk_course.cNo
+	</select>
+
+	<select id="getPublicCoursesBytermNoAndCompusIdAndCno"
+		parameterType="Map" resultMap="PublicCourseResultMap">
+		SELECT
+		<include refid="baseSelectClumm" />
+		from
+		<include refid="joinRS"/>
+		where zk_term_course.termNo = #{termNo} and zk_public_course.campusId = #{campusId} and zk_course.cNo = #{cNo}
+		order by zk_course.cNo
+	</select>
+</mapper>
