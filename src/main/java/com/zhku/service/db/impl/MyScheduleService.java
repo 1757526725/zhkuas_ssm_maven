@@ -11,7 +11,7 @@ import com.zhku.bean.MySchedule;
 import com.zhku.dao.MyScheduleMapper;
 import com.zhku.service.db.IMyScheduleService;
 @Service("myScheduleService")
-public class MyScheduleService extends ServiceSupport implements IMyScheduleService{
+public class MyScheduleService implements IMyScheduleService{
 
 	@Autowired
 	private MyScheduleMapper myScheduleMapper;

@@ -13,7 +13,7 @@ import com.zhku.dao.BaseClassMapper;
 import com.zhku.exception.ObjectExistsException;
 import com.zhku.service.db.IBaseClassService;
 @Service("baseClassServcie")
-public class BaseClassService extends ServiceSupport implements IBaseClassService {
+public class BaseClassService implements IBaseClassService {
 
 	@Autowired
 	private BaseClassMapper baseClassMapper;

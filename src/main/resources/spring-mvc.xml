@@ -58,6 +58,13 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd" default-autowire="
             <mvc:exclude-mapping path="/admin/login"/>  
             <bean class="com.zhku.web.interceptor.AdminSecurityInterceptor" />  
         </mvc:interceptor>  
+        <mvc:interceptor>  
+            <!-- 需拦截的地址 -->  
+            <!-- 一级目录 -->  
+            <mvc:mapping path="/main/**" />  
+            <mvc:mapping path="/index" />  
+            <bean class="com.zhku.web.interceptor.TopBarDataCheckInterceptor" />  
+        </mvc:interceptor>
     </mvc:interceptors>  
 	
 </beans>

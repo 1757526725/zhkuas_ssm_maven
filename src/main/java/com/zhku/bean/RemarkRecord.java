@@ -8,7 +8,7 @@ public class RemarkRecord implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 8071537313137764846L;
-	private int rrid;
+	private Integer id;
 	private String cNo;
 	private int uid; 
 	/*
@@ -17,8 +17,6 @@ public class RemarkRecord implements Serializable{
 	 * 3.2表示已点踩
 	 */
 	private int remarkItem;
-	
-	
 	public RemarkRecord() {
 		super();
 	}
@@ -27,12 +25,7 @@ public class RemarkRecord implements Serializable{
 		this.cNo = cNo;
 		this.uid = uid;
 	}
-	public int getRrid() {
-		return rrid;
-	}
-	public void setRrid(int rrid) {
-		this.rrid = rrid;
-	}
+
 	public String getcNo() {
 		return cNo;
 	}
@@ -50,6 +43,12 @@ public class RemarkRecord implements Serializable{
 	}
 	public void setRemarkItem(int remarkItem) {
 		this.remarkItem = remarkItem;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	

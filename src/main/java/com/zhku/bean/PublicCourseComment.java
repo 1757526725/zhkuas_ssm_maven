@@ -3,13 +3,13 @@ package com.zhku.bean;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
+/**
+ * 课程用户评论
+ * @author JackCan
+ *
+ */
 public class PublicCourseComment implements Serializable {
 	
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6094685259293256033L;
 	private Integer id;
 	private User commentUser;

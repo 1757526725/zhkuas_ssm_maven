@@ -6,6 +6,6 @@ public interface IRemarkRecordService {
 	public void addRemarkRecord(RemarkRecord remarkReacord);
 	public void deleteRemarkRecord(RemarkRecord remarkReacord);
 	public void updateRemarkRecord(RemarkRecord remarkReacord);
-	public RemarkRecord getRemarkRecordByCnoAndUid(RemarkRecord remarkRecord);
+	public RemarkRecord getRemarkRecordByCnoAndUid(String cNo,Integer uid) ;
 	public RemarkRecord getRemarkRecordByRrid(int rrid);
 }

@@ -78,7 +78,7 @@
 													<td width="6%" align="center"><br></td>
 												</c:when>
 												<c:otherwise>
-													<td width="25%" align="left"><a href="public_course_detail?cNo=${publicCourse.termCourse.course.no}" target="_blank">[${publicCourse.termCourse.course.nameNo}]${publicCourse.termCourse.course.name}</a><br></td>
+													<td width="25%" align="left"><a href="${pageContext.request.contextPath}/main/course/detail/${publicCourse.termCourse.course.no}" target="_blank">[${publicCourse.termCourse.course.nameNo}]${publicCourse.termCourse.course.name}</a><br></td>
 													<td width="6%" align="center">${publicCourse.termCourse.course.credits}<br></td>
 												</c:otherwise>
 											</c:choose>

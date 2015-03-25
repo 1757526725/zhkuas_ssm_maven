@@ -8,8 +8,8 @@ public interface IPublicCourseCommentService {
 	public void addPublicCourseComment(PublicCourseComment publicCourseComment);
 	public void deletePublicCourseComment(PublicCourseComment publicCourseComment);
 	public void updatePublicCourseComment(PublicCourseComment publicCourseComment);
-	public PublicCourseComment getPublicCourseCommetById(int pccid);
-	public List<PublicCourseComment> getPublicCourseCommetByCno(String cNo);
+	public PublicCourseComment getPublicCourseCommentById(int pccid);
+	public List<PublicCourseComment> getPublicCourseCommentByCno(String cNo);
 	public List<PublicCourseComment> getPublicCourseCommentsByUid(int uid);
 	public List<PublicCourseComment> getPublicCourseCommentReplyByUid(int uid);
 	public List<PublicCourseComment> getPublicCourseCommentUnreadByUid(int uid);

@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.zhku.bean.User;
 import com.zhku.dao.UserMapper;
-import com.zhku.exception.UserExistException;
 import com.zhku.service.db.IUserService;
 
 @Service("userService")
-public class UserService extends ServiceSupport implements IUserService {
+public class UserService implements IUserService {
 	@Autowired
 	private UserMapper userMapper;
 

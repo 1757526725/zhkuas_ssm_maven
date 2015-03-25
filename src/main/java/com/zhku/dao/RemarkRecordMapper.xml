@@ -11,7 +11,7 @@
 
 	<delete id="deleteRemarkRecord" parameterType="com.zhku.bean.RemarkRecord">
 		delete from
-		zk_remarkRecord where rrid=#{rrid}
+		zk_remarkRecord where rrid=#{id}
 	</delete>
 
 	<update id="updateRemarkRecord" parameterType="com.zhku.bean.RemarkRecord">
@@ -25,6 +25,6 @@
 	</select>
 	
 	<select id="getRemarkRecordByRrid" parameterType="_int">
-		select * from zk_remarkRecord where rrid=#{rrid}
+		select * from zk_remarkRecord where rrid=#{id}
 	</select>
 </mapper>

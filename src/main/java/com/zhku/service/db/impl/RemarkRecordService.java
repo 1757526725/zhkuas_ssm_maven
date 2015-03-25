@@ -1,95 +1,53 @@
 package com.zhku.service.db.impl;
 
-import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.zhku.bean.RemarkRecord;
 import com.zhku.dao.RemarkRecordMapper;
 import com.zhku.service.db.IRemarkRecordService;
 
-public class RemarkRecordService extends ServiceSupport implements
-		IRemarkRecordService {
+@Service("remarkRecordService")
+public class RemarkRecordService implements IRemarkRecordService {
+
+	@Autowired
+	private RemarkRecordMapper remarkRecordMapper;
+	public RemarkRecordMapper getRemarkRecordMapper() {
+		return remarkRecordMapper;
+	}
+
+	public void setRemarkRecordMapper(RemarkRecordMapper remarkRecordMapper) {
+		this.remarkRecordMapper = remarkRecordMapper;
+	}
 
 	@Override
 	public void addRemarkRecord(RemarkRecord remarkReacord) {
-		SqlSession session = null; 
-        try{
-           session = getSqlSessionFactory().openSession(); 
-           RemarkRecordMapper remarkRecord =session.getMapper(RemarkRecordMapper.class);
-           remarkRecord.addRemarkRecord(remarkReacord);
-         session.commit();
-        }catch(Exception e){ 
-            e.printStackTrace();
-        	throw new RuntimeException(e);
-        }finally{ 
-           session.close(); 
-        }
-
+		remarkRecordMapper.addRemarkRecord(remarkReacord);
 	}
 
 	@Override
 	public void deleteRemarkRecord(RemarkRecord remarkReacord) {
-		SqlSession session = null; 
-        try{
-           session = getSqlSessionFactory().openSession(); 
-           RemarkRecordMapper remarkRecordDao =session.getMapper(RemarkRecordMapper.class);
-           remarkRecordDao.deleteRemarkRecord(remarkReacord);
-         session.commit();
-        }catch(Exception e){ 
-            e.printStackTrace();
-        	throw new RuntimeException(e);
-        }finally{ 
-           session.close(); 
-        }
-
-		
+		remarkRecordMapper.deleteRemarkRecord(remarkReacord);
 	}
 
 	@Override
 	public void updateRemarkRecord(RemarkRecord remarkReacord) {
-		SqlSession session = null; 
-        try{
-           session = getSqlSessionFactory().openSession(); 
-           RemarkRecordMapper remarkRecordDao =session.getMapper(RemarkRecordMapper.class);
-           remarkRecordDao.updateRemarkRecord(remarkReacord);
-         session.commit();
-        }catch(Exception e){ 
-            e.printStackTrace();
-        	throw new RuntimeException(e);
-        }finally{ 
-           session.close(); 
-        }
-
+		remarkRecordMapper.updateRemarkRecord(remarkReacord);		
 	}
 
 	@Override
-	public RemarkRecord getRemarkRecordByCnoAndUid(RemarkRecord remarkRecord) {
-		SqlSession session = null; 
-        try{
-           session = getSqlSessionFactory().openSession(); 
-           RemarkRecordMapper remarkRecordDao =session.getMapper(RemarkRecordMapper.class);
-          return remarkRecordDao.getRemarkRecordByCnoAndUid(remarkRecord);
-        }catch(Exception e){ 
-            e.printStackTrace();
-        	throw new RuntimeException(e);
-        }finally{ 
-           session.close(); 
-        }
-
+	public RemarkRecord getRemarkRecordByCnoAndUid(String cNo,Integer uid) {
+		RemarkRecord remarkRecord = new RemarkRecord();
+		remarkRecord.setcNo(cNo);
+		remarkRecord.setUid(uid);
+		return remarkRecordMapper.getRemarkRecordByCnoAndUid(remarkRecord );
 	}
 
 	@Override
 	public RemarkRecord getRemarkRecordByRrid(int rrid) {
-		SqlSession session = null; 
-        try{
-           session = getSqlSessionFactory().openSession(); 
-           RemarkRecordMapper remarkRecordDao =session.getMapper(RemarkRecordMapper.class);
-          return remarkRecordDao.getRemarkRecordByRrid(rrid);
-        }catch(Exception e){ 
-            e.printStackTrace();
-        	throw new RuntimeException(e);
-        }finally{ 
-           session.close(); 
-        }
+		return remarkRecordMapper.getRemarkRecordByRrid(rrid);
 	}
+
+	
 
 }

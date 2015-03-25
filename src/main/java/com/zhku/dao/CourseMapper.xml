@@ -112,7 +112,7 @@
 	<select id="getCourseWitchDetailByCno" resultMap="public_courseResultMap"
 		parameterType="String">
 		select * from zk_organization o right join zk_course c
-		on o.organizationId =c.organizationId
+		on o.organizationNo =c.organizationNo
 		left join zk_public_course_profiles pcp on
 		c.cNo=pcp.cNo left join zk_public_course_type pct on
 		pct.pctid=pcp.pctid
@@ -125,10 +125,10 @@
 		comment_user.nickName as
 		commentUser_nickName,
 		comment_user.isDIYAvater as
-		commentUser_isDIYAvater,comment_user.avator_url as
+		commentUser_isDIYAvater,comment_user.avatorUrl as
 		commentUser_avator_url, reply_user.uid as replyUser_id,
 		reply_user.nickName as replyUser_nickName,reply_user.isDIYAvater as
-		replyUser_isDIYAvater,reply_user.avator_url as
+		replyUser_isDIYAvater,reply_user.avatorUrl as
 		replyUser_avator_url,base_cc.comment_time as
 		comment_time,
 		child_cc.pccid as child_pccid ,child_cc.cNo as child_cNo,
@@ -138,7 +138,7 @@
 		child_comment_user.nickName as
 		child_commentUser_nickName,child_comment_user.isDIYAvater as
 		child_commentUser_isDIYAvater,
-		child_comment_user.avator_url as
+		child_comment_user.avatorUrl as
 		child_commentUser_avator_url,
 		child_reply_user.uid as
 		child_replyUser_id,
@@ -146,24 +146,24 @@
 		as
 		child_replyUser_nickName,child_reply_user.isDIYAvater
 		as
-		child_replyUser_isDIYAvater,child_reply_user.avator_url as
+		child_replyUser_isDIYAvater,child_reply_user.avatorUrl as
 		child_replyUser_avator_url,child_cc.comment_time as
 		child_comment_time
 		FROM
 		zk_public_course_comments base_cc left
 		join
-		zk_users comment_user on
+		zk_user comment_user on
 		comment_user.uid =
 		base_cc.comment_uid
 		left join
-		zk_users reply_user on
+		zk_user reply_user on
 		base_cc.reply_uid=reply_user.uid left
 		join
 		zk_public_course_comments
-		child_cc left join zk_users
+		child_cc left join zk_user
 		child_comment_user on
 		child_cc.comment_uid=child_comment_user.uid on
-		base_cc.pccid=child_cc.parent_pccid left join zk_users
+		base_cc.pccid=child_cc.parent_pccid left join zk_user
 		child_reply_user on child_cc.reply_uid=child_reply_user.uid where
 		base_cc.parent_pccid is null or base_cc.parent_pccid=0) zk_comment on
 		c.cNo= zk_comment.parent_cNo

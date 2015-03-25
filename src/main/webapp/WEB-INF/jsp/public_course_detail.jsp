@@ -4,7 +4,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <jsp:include page="header.jsp"></jsp:include>
-<%String currentTermNo=Constants.CURRENT_TERMNO; %>
+<%
+	String currentTermNo = Constants.CURRENT_TERMNO;
+%>
 <body>
 	<!-- Wrap all page content here -->
 	<div id="wrap">
@@ -16,28 +18,27 @@
 			<div id="selectBar" class="selectBar-fixed-margin">
 				<div type="button" class="bt-circle" data-toggle="tooltip"
 					data-placement="right" title="" data-original-title="全部">
-					<a href="public_course?compusId=1&amp;termNo=<%=currentTermNo%>">◆</a>
-				</div>
-				<div class="tooltip fade right in"
-					style="top: 14px; left: 50px; display: block;">
-					<div class="tooltip-arrow" style="top: 28.947368421052634%;"></div>
-					<div class="tooltip-inner">全部</div>
+					<a href="${pageContext.request.contextPath}/main/campus/${campus.id }/course/term/${term.no}">◆</a>
 				</div>
 				<div type="button" class="bt-circle" data-toggle="tooltip"
 					data-placement="right" title="" data-original-title="人文社科类">
-					<a href="public_course?compusId=1&amp;termNo=<%=currentTermNo%>&amp;typeId=1">人</a>
+					<a
+						href="${pageContext.request.contextPath}/main/campus/${campus.id }/course/term/${term.no}/type/<%=Constants.CourseType.RENWENG.getCode()%>">人</a>
 				</div>
 				<div type="button" class="bt-circle" data-toggle="tooltip"
 					data-placement="right" title="" data-original-title="科学技术类">
-					<a href="public_course?compusId=1&amp;termNo=<%=currentTermNo%>&amp;typeId=2">科</a>
+					<a
+						href="${pageContext.request.contextPath}/main/campus/${campus.id }/course/term/${term.no}/type/<%=Constants.CourseType.KEJI.getCode()%>">科</a>
 				</div>
 				<div type="button" class="bt-circle" data-toggle="tooltip"
 					data-placement="right" title="" data-original-title="外语类">
-					<a href="public_course?compusId=1&amp;termNo=<%=currentTermNo%>&amp;typeId=3">外</a>
+					<a
+						href="${pageContext.request.contextPath}/main/campus/${campus.id }/course/term/${term.no}/type/<%=Constants.CourseType.WAIYU.getCode()%>">外</a>
 				</div>
 				<div type="button" class="bt-circle" data-toggle="tooltip"
 					data-placement="right" title="" data-original-title="艺术体育类">
-					<a href="public_course?compusId=1&amp;termNo=<%=currentTermNo%>&amp;typeId=4">艺</a>
+					<a
+						href="${pageContext.request.contextPath}/main/campus/${campus.id }/course/term/${term.no}/type/<%=Constants.CourseType.YISHU.getCode()%>">艺</a>
 				</div>
 			</div>
 			<div class="container-narrow">
@@ -45,16 +46,16 @@
 					<div class="titleBox">
 						<div class="cycle bt-circle">${course.courseProfiles.recommend}</div>
 						<div style="width=40px;"></div>
-						<div class="c-title">${course.cName}</div>
+						<div class="c-title">${course.name}</div>
 						<div class="half-cycle"></div>
 					</div>
 					<table>
 						<tr>
 							<td class="itemTitle">课程号：</td>
-							<td id="cNo" width="60">${course.cNo}</td>
+							<td id="cNo" width="60">${course.no}</td>
 							<td class="itemTitle">课程名代号：</td>
-							<td width="370">[${course.cNameNo}]${course.cName} <span
-								class="label label-primary">${course.courseProfiles.pcType.pctName
+							<td width="370">[${course.nameNo}]${course.name} <span
+								class="label label-primary">${course.courseProfiles.pcType.name
 									}</span></td>
 						</tr>
 
@@ -78,11 +79,11 @@
 								<c:when test="${remarkRecord==null }">
 									<button id="remark_good" type="button"
 										class="btn btn-primary btn-sm ">
-										<span class="glyphicon glyphicon-thumbs-up"></span> <span>${course.courseProfiles.good_count}</span>
+										<span class="glyphicon glyphicon-thumbs-up"></span> <span>${course.courseProfiles.goodCount}</span>
 									</button>
 									<button id="remark_bad" type="button"
 										class="btn btn-info btn-sm ">
-										<span class="glyphicon glyphicon-thumbs-down"></span> <span>${course.courseProfiles.bad_count}</span>
+										<span class="glyphicon glyphicon-thumbs-down"></span> <span>${course.courseProfiles.badCount}</span>
 									</button>
 								</c:when>
 
@@ -91,13 +92,13 @@
 										class="btn btn-primary btn-sm disabled">
 										<span class="glyphicon glyphicon-thumbs-up"></span>
 										<c:if test="${remarkRecord.remarkItem==1}">已赞  </c:if>
-										<span>${course.courseProfiles.good_count}</span>
+										<span>${course.courseProfiles.goodCount}</span>
 									</button>
 									<button id="remark_bad" type="button"
 										class="btn btn-info btn-sm disabled">
 										<span class="glyphicon glyphicon-thumbs-down"></span>
 										<c:if test="${remarkRecord.remarkItem==2}">已踩  </c:if>
-										<span>${course.courseProfiles.bad_count}</span>
+										<span>${course.courseProfiles.badCount}</span>
 									</button>
 								</c:otherwise>
 
@@ -131,8 +132,8 @@
 					<c:if test="${course.commentList!=null}">
 						<c:forEach var="commentItem" items="${pagination.pageDataList}"
 							begin="${pagination.begin}" end="${pagination.end}">
-							<div pccid="${commentItem.pccid}"
-								id="comment-${commentItem.pccid}" class="comment-item clearfix">
+							<div pccid="${commentItem.id}"
+								id="comment-${commentItem.id}" class="comment-item clearfix">
 								<div class="user-info">
 
 									<c:choose>
@@ -144,7 +145,7 @@
 										</c:when>
 										<c:otherwise>
 											<img
-												src='<c:out value="${commentItem.commentUser.avator_url}"
+												src='<c:out value="${commentItem.commentUser.avatorUrl}"
 												default="http://bcs.duapp.com/zhkuas/avater%2Fdefault_avt.jpg"></c:out>'
 												alt="${commentItem.commentUser.nickName}"
 												class="img-rounded avatar">
@@ -158,7 +159,8 @@
 									<div class="triangle-border ">
 										<c:choose>
 											<c:when test="${commentItem.state==2}">
-												<span class="text-warning"><c:out value="${commentItem.content}"></c:out></span>
+												<span class="text-warning"><c:out
+														value="${commentItem.content}"></c:out></span>
 											</c:when>
 											<c:otherwise>
 												<c:out value="${commentItem.content}"></c:out>
@@ -167,13 +169,13 @@
 										<span class="pull-right"><c:if
 												test="${(commentItem.commentUser.uid==loginUser.uid||loginUser.uid==1)&& commentItem.state!=2}">
 												<a href="javascript:void(0)"
-							onclick="deleteComment(${commentItem.pccid})">删除</a> | </c:if><a
+													onclick="deleteComment(${commentItem.id})">删除</a> | </c:if><a
 											class="bt-reply" href="javascript:void(0)">回复</a> </span>
 
 										<c:if test="${commentItem.commentChilds!=null}">
 											<c:forEach var="child_comment"
 												items="${commentItem.commentChilds}">
-												<div pccid="${child_comment.pccid}" class="comment-child ">
+												<div pccid="${child_comment.id}" class="comment-child ">
 													<c:choose>
 														<c:when
 															test="${child_comment.commentUser.isDIYAvater==true}">
@@ -184,7 +186,7 @@
 														</c:when>
 														<c:otherwise>
 															<img
-																src='<c:out value="${child_comment.commentUser.avator_url}"
+																src='<c:out value="${child_comment.commentUser.avatorUrl}"
 												default="http://bcs.duapp.com/zhkuas/avater%2Fdefault_avt.jpg"></c:out>'
 																alt="${commentItem.commentUser.nickName}"
 																class="img-rounded avatar-min">
@@ -201,7 +203,7 @@
 														<span class="pull-right"><c:if
 																test="${child_comment.commentUser.uid==loginUser.uid||loginUser.uid==1}">
 																<a href="javascript:void(0)"
-																	onclick="deleteComment(${child_comment.pccid})">删除</a> | </c:if><a
+																	onclick="deleteComment(${child_comment.id})">删除</a> | </c:if><a
 															class="bt-reply" href="javascript:void(0)">回复</a> </span>
 													</div>
 												</div>
@@ -217,12 +219,11 @@
 							<ul class="pagination pull-right">
 								<c:choose>
 									<c:when test="${1==pagination.currentPage}">
-										<li class="disabled"><a href="javacript:void(0)">«</a>
-										</li>
+										<li class="disabled"><a href="javacript:void(0)">«</a></li>
 									</c:when>
 									<c:otherwise>
 										<li><a
-											href="public_course_detail?cNo=${course.cNo}&currentPage=${pagination.currentPage-1}">«</a>
+											href="public_course_detail?cNo=${course.no}&currentPage=${pagination.currentPage-1}">«</a>
 										</li>
 									</c:otherwise>
 								</c:choose>
@@ -234,19 +235,18 @@
 										</c:when>
 										<c:otherwise>
 											<li><a
-												href="public_course_detail?cNo=${course.cNo}&currentPage=${page}">${page}</a>
+												href="public_course_detail?cNo=${course.no}&currentPage=${page}">${page}</a>
 											</li>
 										</c:otherwise>
 									</c:choose>
 								</c:forEach>
 								<c:choose>
 									<c:when test="${pagination.pageCount==pagination.currentPage}">
-										<li class="disabled"><a href="javacript:void(0)">»</a>
-										</li>
+										<li class="disabled"><a href="javacript:void(0)">»</a></li>
 									</c:when>
 									<c:otherwise>
 										<li><a
-											href="public_course_detail?cNo=${course.cNo}&currentPage=${pagination.currentPage+1}">»</a>
+											href="public_course_detail?cNo=${course.no}&currentPage=${pagination.currentPage+1}">»</a>
 										</li>
 									</c:otherwise>
 								</c:choose>
@@ -260,7 +260,7 @@
 		</div>
 		<div style="clear:both;"></div>
 		<jsp:include page="footer.jsp"></jsp:include>
-		<script src="${pageContext.request.contextPath}/js/pcd_app.js"></script>
+		<script src="${pageContext.request.contextPath}/static/js/pcd_app.js"></script>
 	</div>
 </body>
 </html>

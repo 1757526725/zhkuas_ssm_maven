@@ -2,7 +2,6 @@ package com.zhku.service.db.impl;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +10,7 @@ import com.zhku.dao.TeacherMapper;
 import com.zhku.exception.ObjectExistsException;
 import com.zhku.service.db.ITeacherService;
 @Service("teacherService")
-public class TeacherService extends ServiceSupport implements
+public class TeacherService  implements
 		ITeacherService {
 	@Autowired
 	private TeacherMapper teacherMapper;
