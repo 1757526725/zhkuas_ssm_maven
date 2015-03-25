@@ -63,6 +63,7 @@ http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd" default-autowire="
             <!-- 一级目录 -->  
             <mvc:mapping path="/main/**" />  
             <mvc:mapping path="/index" />  
+            <mvc:exclude-mapping path="/main/ws/**"/>  
             <bean class="com.zhku.web.interceptor.TopBarDataCheckInterceptor" />  
         </mvc:interceptor>
     </mvc:interceptors>  

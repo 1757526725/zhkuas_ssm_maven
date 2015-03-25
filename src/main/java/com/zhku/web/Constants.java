@@ -368,6 +368,7 @@ public class Constants {
 		FETCH_ACCOUNT_NULL("there is not account for fetching access", "-10011", "没有教务网账户用于抓取数据，请至少在后台配置好一个账户！"), 
 		SNO_NULL_ERROR("sno could not be null", "-100012", "学号不能为空"), 
 		PERMISSIONS_DO_NOT_ALLOW("Permissions do not allow", "-100013", "权限不足"), 
+		HAVE_NOT_LOGIN_SYSTEM("this operation need authnation", "-100014", "未登录系统，请登陆后操作"), 
 		// 网络连接相关错误
 		CONNECTION_ERROR("connection error", "-00001", "连接错误"), 
 		BIND_ACCOUT_FAIL("bind your college account fail", "-00004", "绑定教务网帐号失败"),
