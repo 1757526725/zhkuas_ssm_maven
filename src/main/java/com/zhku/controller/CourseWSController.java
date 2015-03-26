@@ -46,23 +46,21 @@ public class CourseWSController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="user/course/comment/{pccid}",method=RequestMethod.DELETE)
-	public Map<String,Object> removeComment(HttpSession session,Integer pccid){
+	public Map<String,Object> removeComment(HttpSession session,@PathVariable Integer pccid){
 		User user = SecurityUtil.getUser(session);
 		if(user==null){
 			return WebUtils.webJsonError(Error.PERMISSIONS_DO_NOT_ALLOW);
 		}
 		PublicCourseComment publicCourseComment = null;
-	/*	publicCourseComment = publicCourseCommentService.getPublicCourseCommentById(pccid);
+		publicCourseComment = publicCourseCommentService.getPublicCourseCommentById(pccid);
 		if (publicCourseComment != null && (user.getUid() == 1 ||publicCourseComment.getCommentUser().getUid()== user
 				.getUid())) {
-			commentService.deletePublicCourseComment(publicCourseComment);
-			out.print("comment delete success");
+			publicCourseCommentService.deletePublicCourseComment(publicCourseComment);
+			return WebUtils.webJsonResult("删除成功!");
 		}else{
-			out.print("less permission");
-			return;
+			return WebUtils.webJsonError("删除失败，请刷新重试!");
 		}
-	*/
-		return null;
+	
 	}
 	
 	/**

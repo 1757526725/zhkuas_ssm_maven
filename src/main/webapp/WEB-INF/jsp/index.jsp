@@ -90,10 +90,10 @@
 
 								</div> </a>
 						</div>
-						<%-- <div>
+						<div>
 
 							<a href="javascript:void(0)" class="card"
-								data-name="myPublicCourse"> <img
+								data-name="user/course/statistics"> <img
 								src="${pageContext.request.contextPath}/static/images/Course_statistics.png"
 								alt="Add your own" data-view="channel_image"
 								data-name="Add your own" data-height="24" data-width="22">
@@ -104,7 +104,7 @@
 									<p>你可以查看你已经修过的各类选修课以及学分统计.</p>
 
 								</div> </a>
-						</div> --%>
+						</div>
 						<div>
 
 							<a href="javascript:void(0)" class="card"

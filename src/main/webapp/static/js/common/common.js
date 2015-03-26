@@ -33,7 +33,7 @@ $(document).ready(function() {
 							});
 });
 function deleteComment(pccid) {
-	showMyConfirm("你确定删除此条评论吗?", function() {
+	showConfirm("你确定删除此条评论吗?", function() {
 		$.post(domain+"main/ws/user/course/comment/"+pccid,{"_method":"delete"}, function(data) {
 			if (data == "") {
 				showAlert("错误", "删除失败，请刷新页面重试！");
