@@ -260,7 +260,7 @@
 		</div>
 		<div style="clear:both;"></div>
 		<jsp:include page="footer.jsp"></jsp:include>
-		<script src="${pageContext.request.contextPath}/static/js/pcd_app.js"></script>
+		<script src="${pageContext.request.contextPath}/static/js/courseDetail/courseDetailPage.js"></script>
 	</div>
 </body>
 </html>

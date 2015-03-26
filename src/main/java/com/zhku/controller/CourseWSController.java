@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.zhku.bean.PublicCourseComment;
 import com.zhku.bean.PublicCourseProfiles;
 import com.zhku.bean.RemarkRecord;
 import com.zhku.bean.User;
 import com.zhku.controller.util.SecurityUtil;
+import com.zhku.service.db.IPublicCourseCommentService;
 import com.zhku.service.db.IPublicCourseProfilesService;
 import com.zhku.service.db.IRemarkRecordService;
 import com.zhku.utils.WebUtils;
@@ -34,6 +36,74 @@ public class CourseWSController {
 	private IRemarkRecordService remarkRecordService;
 	@Autowired
 	private IPublicCourseProfilesService publicCourseProfilesService;
+	@Autowired
+	private IPublicCourseCommentService publicCourseCommentService;
+	
+	/**
+	 * 删除评论 
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="user/course/comment/{pccid}",method=RequestMethod.DELETE)
+	public Map<String,Object> removeComment(HttpSession session,Integer pccid){
+		User user = SecurityUtil.getUser(session);
+		if(user==null){
+			return WebUtils.webJsonError(Error.PERMISSIONS_DO_NOT_ALLOW);
+		}
+		PublicCourseComment publicCourseComment = null;
+	/*	publicCourseComment = publicCourseCommentService.getPublicCourseCommentById(pccid);
+		if (publicCourseComment != null && (user.getUid() == 1 ||publicCourseComment.getCommentUser().getUid()== user
+				.getUid())) {
+			commentService.deletePublicCourseComment(publicCourseComment);
+			out.print("comment delete success");
+		}else{
+			out.print("less permission");
+			return;
+		}
+	*/
+		return null;
+	}
+	
+	/**
+	 * POST 课程评论与回复
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody 
+	@RequestMapping(value="user/course/comment",method=RequestMethod.POST)
+	public Map<String,Object> makeCommentOrReply(HttpSession session ,String cNo,String mode,String content,Integer parent_pccid,Integer reply_uid){
+		User user = SecurityUtil.getUser(session);
+		if(user==null){
+			return WebUtils.webJsonError(Error.HAVE_NOT_LOGIN_SYSTEM);
+		}
+		//判断是不是合法的表单
+		if(content==null||"".equals(content.trim())){
+			return WebUtils.webJsonError("内容不能为空!");
+		}
+		PublicCourseComment comment=new PublicCourseComment();
+		comment.setcNo(cNo);
+		comment.setCommentUser(user);
+		comment.setContent(content);
+		if ("creatRootComment".equals(mode)) {
+			
+		}else if("replyComment".equals(mode)||"directReply".equals(mode)){	
+			comment.setParentId(parent_pccid);
+			comment.setReplyUser(new User(reply_uid));
+			
+		}
+		publicCourseCommentService.addPublicCourseComment(comment);
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("parentId", comment.getId());
+		return WebUtils.webJsonResult(result);
+	}
+	
+	/**
+	 * POST 用户 点赞 或者点 踩
+	 * @param cNo
+	 * @param remarkItem
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value="user/course/remark",method=RequestMethod.POST)
 	public Map<String,Object> doCourseRemark(HttpSession session, String cNo,String remarkItem){
@@ -66,28 +136,46 @@ public class CourseWSController {
 				}
 				publicCourseProfilesService.updatePublicCourseProfiles(courseProfile);
 			}
-			int count=0;
-			if(remarkItem.equals("1")){
-				count=courseProfile.getGoodCount();
-			}else if(remarkItem.equals("2")){
-				count=courseProfile.getBadCount();
-			}
 			Map<String,Object> resultMap = new HashMap<String,Object>();
-			resultMap.put("count", count);
+			resultMap.put("good", courseProfile.getGoodCount());
+			resultMap.put("bad", courseProfile.getBadCount());
 			return WebUtils.webJsonResult(resultMap);
 		}else{
 			return WebUtils.webJsonError("你已经点过了!!!");
 		}
 	}
+	/**
+	 * 查询当前课程的点赞和点踩得人数
+	 * @param session
+	 * @param cNo
+	 * @return json{
+	 * 
+	 * 			}
+	 */
 	@ResponseBody
 	@RequestMapping("user/course/{cNo}/remark")
 	public Map<String,Object> getUserRemarkInfo(HttpSession session,@PathVariable String cNo){
-		User user = SecurityUtil.getUser(session);
-		if(user==null){
-			return WebUtils.webJsonError(Error.HAVE_NOT_LOGIN_SYSTEM);
+		Map<String,Object> resultMap = new HashMap<String,Object>();
+		Integer good = 0;
+		Integer bad =  0;
+		PublicCourseProfiles courseProfile = publicCourseProfilesService.getPublicCourseProfilesByCno(cNo);
+		if(courseProfile!=null){
+			good =courseProfile.getGoodCount();
+			bad = courseProfile.getBadCount();
 		}
-		RemarkRecord record = remarkRecordService.getRemarkRecordByCnoAndUid(cNo, user.getUid());
-		return null;
+		User user = SecurityUtil.getUser(session);
+		if(user!=null){
+			RemarkRecord record = remarkRecordService.getRemarkRecordByCnoAndUid(cNo, user.getUid());
+			if(record!=null){
+				Map<String,Object>  subResult = new HashMap<String,Object>();
+				subResult.put("remarkItem", record.getRemarkItem());
+				subResult.put("remarkItemName", record.getRemarkItem()==1?"赞":"踩");
+				resultMap.put("userRecord", subResult);
+			}
+		}
+		resultMap.put("good", good);
+		resultMap.put("bad", bad);
+		return resultMap;
 	}
 	public IRemarkRecordService getRemarkRecordService() {
 		return remarkRecordService;
@@ -100,5 +188,13 @@ public class CourseWSController {
 	}
 	public void setPublicCourseProfilesService(IPublicCourseProfilesService publicCourseProfilesService) {
 		this.publicCourseProfilesService = publicCourseProfilesService;
+	}
+
+	public IPublicCourseCommentService getPublicCourseCommentService() {
+		return publicCourseCommentService;
+	}
+
+	public void setPublicCourseCommentService(IPublicCourseCommentService publicCourseCommentService) {
+		this.publicCourseCommentService = publicCourseCommentService;
 	}
 }

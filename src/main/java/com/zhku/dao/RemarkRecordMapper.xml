@@ -5,26 +5,26 @@
 	<insert id="addRemarkRecord" parameterType="com.zhku.bean.RemarkRecord"
 		useGeneratedKeys="true" keyProperty="rrid">
 		insert into
-		zk_remarkRecord(cNo,uid,remarkItem)
+		zk_up_down_record(cNo,uid,remarkItem)
 		values(#{cNo},#{uid},#{remarkItem})
 	</insert>
 
 	<delete id="deleteRemarkRecord" parameterType="com.zhku.bean.RemarkRecord">
 		delete from
-		zk_remarkRecord where rrid=#{id}
+		zk_up_down_record where rrid=#{id}
 	</delete>
 
 	<update id="updateRemarkRecord" parameterType="com.zhku.bean.RemarkRecord">
 		update
-		zk_remarkRecord
+		zk_up_down_record
 		set cNo=#{cNo},uid=#{uid},remarkItem=#{remarkItem}
 	</update>
 
 	<select id="getRemarkRecordByCnoAndUid" parameterType="Map" resultType="com.zhku.bean.RemarkRecord">
-		select * from zk_remarkRecord where cNo=#{cNo} and uid=#{uid}
+		select * from zk_up_down_record where cNo=#{cNo} and uid=#{uid}
 	</select>
 	
 	<select id="getRemarkRecordByRrid" parameterType="_int">
-		select * from zk_remarkRecord where rrid=#{id}
+		select * from zk_up_down_record where rrid=#{id}
 	</select>
 </mapper>

@@ -32,6 +32,59 @@ $(document).ready(function() {
 								window.open(authoHost+'/weibo/login?service='+domain, '_self');
 							});
 });
+function deleteComment(pccid) {
+	showMyConfirm("你确定删除此条评论吗?", function() {
+		$.post(domain+"main/ws/user/course/comment/"+pccid,{"_method":"delete"}, function(data) {
+			if (data == "") {
+				showAlert("错误", "删除失败，请刷新页面重试！");
+				return;
+			}
+			if(data.state==1){
+				showAlert("消息", "删除成功", function(){
+					location.reload();
+				});
+				return;
+			}
+			if(data.state==0){
+				showAlert(data.error.error_description);
+				return;
+			}
+		});
+
+	});
+}
+function createComment(mode, cNo, content, parent_pccid, reply_uid) {
+	$.ajax({
+		type : "POST",
+		url : domain+"main/ws/user/course/comment",
+		async : false,
+		data : {
+			"mode" : mode,
+			"cNo" : cNo,
+			"content" : content,
+			"parent_pccid" : parent_pccid,
+			"reply_uid" : reply_uid
+		},
+		success : function(data) {
+			if (data == '') {
+				showAlert("消息", "服务器出错");
+				return;
+			}
+			if(data.state==0){
+				showAlert(data.error.error_description);
+				return;
+			}
+			if(data.state==1){
+				if (mode == "directReply") {
+					location.href = "comment?tab=myComment";
+					return;
+				}
+				location.reload();
+			}
+		}
+	});
+
+}
 function showAlert(title, message, endCall, model) {
 
 	var alert_dialog = $("#alert-dialog");
