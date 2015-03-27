@@ -16,8 +16,8 @@
 		<div id="pageContent">
 			<div class="container-narrow clearfix">
 				<ul class="nav nav-tabs">
-					<li class="active"><a href="comment?tab=myComment">我的评论</a></li>
-					<li><a href="comment?tab=replyMe">回复我的评论</a></li>
+					<li class="active"><a href="${pageContext.request.contextPath}/main/user/comment/me">我的评论</a></li>
+					<li><a href="${pageContext.request.contextPath}/main/user/comment/receive">回复我的评论</a></li>
 
 				</ul>
 
@@ -38,7 +38,7 @@
 											</c:when>
 											<c:otherwise>
 												<img
-													src='<c:out value="${comment.commentUser.avator_url}"
+													src='<c:out value="${comment.commentUser.avatorUrl}"
 												default="http://bcs.duapp.com/zhkuas/avater%2Fdefault_avt.jpg"></c:out>'
 													alt="${comment.commentUser.nickName}"
 													class="media-object img-rounded avatar">
@@ -51,18 +51,18 @@
 											${comment.commentUser.nickName}
 											<div class="pull-right">
 												课程:<a
-													href="public_course_detail?cNo=${comment.cNo}#comment-${comment.pccid}"><span
+													href="${pageContext.request.contextPath}/main/course/detail/${comment.cNo}#comment-${comment.id}"><span
 													class="label label-primary">${comment.courseName}</span> </a>
 											</div>
 										</h4>
 										<c:if test="${comment.replyUser!=null}">回复 <span
 												class="text-success">${comment.replyUser.nickName}</span>:</c:if>
 										<a
-											href="public_course_detail?cNo=${comment.cNo}#comment-${comment.pccid}">${comment.content}</a>
+											href="${pageContext.request.contextPath}/main/course/detail/${comment.cNo}#comment-${comment.id}">${comment.content}</a>
 										<br> <span class="text-warning"><fmt:formatDate
-												value="${comment.comment_time}" pattern="yyyy-MM-dd HH:mm" />
+												value="${comment.commentTime}" pattern="yyyy-MM-dd HH:mm" />
 										</span> <span class="pull-right"> <a href="javascript:void(0)"
-											onclick="deleteComment(${comment.pccid})">删除</a> </span>
+											onclick="deleteComment(${comment.id})">删除</a> </span>
 									</div>
 								</div>
 							</div>

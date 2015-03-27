@@ -80,7 +80,7 @@
 											<td><input type="checkbox"></td>
 											<td class="text-center">${classroom.name }</td>
 											<td class="text-center">${classroom.no}</td>
-											<td class="text-center"><c:out value="${classroom.schoolBuilding.name}"default="${currentBuilding.name}"></c:out></td>
+											<td class="text-center"><c:out value="${classroom.schoolBuilding.name}" default="${currentBuilding.name}"></c:out></td>
 										</tr>
 									</c:forEach>
 								</tbody>

@@ -6,6 +6,8 @@ var CourseDetailPage = (function(){
 	var _btn_remark_good = $("#remark_good");
 	var _btn_remark_bad = $("#remark_bad");
 	var remarkItem = {good : 1,bad : 2};
+	var _campusId = $("input[name='campusId']").val();
+	var _termNo = $("input[name='termNo']").val();
 	var cNo = $("#cNo").html();
 	var main = function(){
 		_initPage();
@@ -35,12 +37,26 @@ var CourseDetailPage = (function(){
 					createComment("creatRootComment", cNo,$("#texta-comment").val(), null, null);
 					//
 		});
-		
+		//加入选课方案按钮
+		$("#bt-addToMyPlan").click(function(){
+			if (!UserStatus.isLogin()) {
+				showAlert("消息", "请登录后操作！");
+				return;
+			}
+			//显示并初始化窗口
+			if(!UserStatus.isBinded()){
+				showAlert("提示",'<p>1.你可能未绑定教务网账户 <a href="passport?tab=basic">去绑定</a></p><p>2.你可能未绑定上课的校区。 <a href="passport?tab=basic">去绑定校区</a></p>');
+				return;
+			}
+			PublicCourse.showOptionDialog(cNo,_campusId,_termNo,function(){
+				location.reload();
+			});
+		});
 		// 回复按钮
 		$(".bt-reply").click(
 				function() {
 					if ($(this).parent().siblings(".reply-area").length > 0) {
-						_removeReplyArea(this);
+						Comment.removeReplyArea(this);
 					} else {
 						// 针对子评论
 						var commentUserNode = $(this).parent().parent().siblings(
@@ -56,7 +72,7 @@ var CourseDetailPage = (function(){
 							showAlert("消息", "请登录后操作！");
 							return;
 						}
-						_showReplyInputArea(this, "回复 " + commentUserNode.html()
+						Comment.showReplyInputArea(this, "回复 " + commentUserNode.html()
 								+ ":");
 					}
 		});
@@ -122,49 +138,6 @@ var CourseDetailPage = (function(){
 			bt_good.addClass("disabled");
 		}
 	}
-	 
-	 var _showReplyInputArea =function(_this, replyUserName){
-		 var replyAreaNode = $('<div class="reply-area clearfix"><textarea placeholder="'
-					+ replyUserName
-					+ '" name="reply-content" class="texta-reply form-control"></textarea><button type="submit" data-loading-text="发表中..." class="btn btn-warning btn-sm pull-right">评论</button></div>');
-
-			$(_this).parent().after(replyAreaNode);
-
-			// 评论按钮注册事件
-
-			var bt_comment = replyAreaNode.find(".btn");
-			var textarea = replyAreaNode.find("textarea");
-			bt_comment.click(function() {
-				var content = textarea.val();
-				if (content == "") {
-					showAlert("错误", "回复内容不能为空");
-					return;
-				}
-				var ppcid = replyAreaNode.parent().parent().attr("pccid")
-						|| replyAreaNode.parent().parent().parent().attr("pccid");
-				var parent_pccid = replyAreaNode.parent().parent().parent().parent()
-						.parent().attr("pccid")
-						|| replyAreaNode.parent().parent().parent().attr("pccid")
-						|| replyAreaNode.parent().parent().attr("parent_pccid");
-				var reply_uid = replyAreaNode.parent().siblings(".nickName")
-						.attr("uid")
-						|| replyAreaNode.parent().parent().siblings(".user-info").find(
-								".nickName").attr("uid")
-						|| replyAreaNode.parent().find(".commentUserName").attr("uid");
-				var cNo = $("#cNo").html();
-				var actionItem = "";
-				if (cNo == undefined) {
-					cNo = replyAreaNode.parent().parent().attr("cNo");
-					actionItem = "directReply";
-				} else {
-					actionItem = "replyComment";
-				}
-				createComment(actionItem, cNo, content, parent_pccid, reply_uid);
-			});
-	 }
-	 	var _removeReplyArea =function(_this) {
-			$(_this).parent().siblings(".reply-area").remove();
-		};
 	return {
 		main: main
 	};

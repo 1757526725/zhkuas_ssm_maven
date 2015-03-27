@@ -35,7 +35,7 @@
 		<result column="child_cNo" property="cNo" />
 		<result column="child_content" property="content" />
 		<result column="child_parent_pccid" property="parentId" />
-		<result column="child_comment_time" property="comment_time" />
+		<result column="child_comment_time" property="commentTime" />
 		<association property="replyUser" resultMap="child_replyUser_resultMap"></association>
 		<association property="commentUser" resultMap="child_commentUser_resultMap"></association>
 
@@ -153,6 +153,7 @@
 		<include refid="select_base_clumm"></include>
 		FROM
 		<include refid="from_table_unit"></include>
+		left join zk_public_course_comments zpccp on base_cc.parent_pccid =zpccp.pccid
 		where
 		reply_user.uid=#{uid} or zpccp.comment_uid =#{uid} order by base_cc.comment_time desc
 	</select>

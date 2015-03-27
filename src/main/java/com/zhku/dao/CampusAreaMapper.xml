@@ -13,8 +13,9 @@
 			resultMap="com.zhku.dao.SchoolBuildingMapper.SchoolBuildingBaseResultMap"></collection>
 	</resultMap>
 	<resultMap type="com.zhku.bean.CampusArea" id="CampusAreaFullResultMap"
-		extends="CampusAreaBaseResultMap">
-
+		extends="CampusAreaWithBuildingResultMap">
+		<collection property="classList" column="classNo"
+			resultMap="com.zhku.dao.BaseClassMapper.baseClassResultMap"></collection>
 	</resultMap>
 
 	<insert id="addCampusArea" parameterType="com.zhku.bean.CampusArea">
@@ -55,8 +56,22 @@
 		select * from
 		zk_campus
 	</select>
-	<select id="getCampusAreasWithSubData" resultMap="CampusAreaBaseResultMap">
-		select * from
-		zk_campus
+	<select id="getCampusAreasWithSubData" resultMap="CampusAreaFullResultMap">
+		SELECT
+		zk_campus.campusId,
+		zk_campus.campusName,
+		zk_class.classId,
+		zk_class.className,
+		zk_class.majorNo,
+		zk_class.grade,
+		zk_school_building.sbId,
+		zk_school_building.schoolBuildingName,
+		zk_school_building.schoolBuildingNo,
+		zk_campus_class_rs.ccrsid,
+		zk_class.classNo
+		FROM
+		zk_campus LEFT JOIN zk_campus_class_rs on zk_campus.campusId = zk_campus_class_rs.campusId LEFT JOIN 
+		zk_class on zk_campus_class_rs.classNo = zk_class.classNo LEFT JOIN 
+		zk_school_building on zk_campus.campusId = zk_school_building.campusId
 	</select>
 </mapper>

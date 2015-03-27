@@ -32,6 +32,9 @@
 					<button class="btn btn-success" id="btn-update">
 						<i class="icon-refresh"></i> 更新数据
 					</button>
+					<button class="btn btn-success" id="btn-update">
+						<i class="icon-edit"></i> 编辑(校区-班级)
+					</button>
 					<div class="update-message" style="display:none;">
 						<div>
 							<span class="icon24 icomoon-icon-arrow-up-2 green">LOG:</span>
@@ -67,13 +70,14 @@
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="major" items="${majorList}">
+									<c:forEach var="clazz" items="${classes}">
 										<tr>
 											<td><input type="checkbox"></td>
-											<td class="text-center">${major.name }</td>
-											<td class="text-center">${major.no}</td>
-											<td class="text-center"><c:out value="${major.academy.name}"default="${currentAcademy.name}"></c:out></td>
-											<td class="text-center"><a href="javascript:;">查看班级</a></td>
+											<td class="text-center">${clazz.name }</td>
+											<td class="text-center">${clazz.no}</td>
+											<td class="text-center"><c:out value="${clazz.major.academy.name}" default="${currentAcademy.name}"></c:out></td>
+											<td class="text-center"><c:out value="${clazz.campus.name}" default="全校"></c:out></td>
+											<td class="text-center"><a href="javascript:;">查看学生</a></td>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -82,7 +86,7 @@
 					</div>
 				</div>
 			<%
-				Object ob =request.getAttribute("majorList");
+				Object ob =request.getAttribute("classes");
 				if(ob!=null&& ob instanceof  Page){
 					Page pageList = (Page) ob;
 					//大于一页的时候
@@ -99,10 +103,17 @@
 							out.print("<li><a href=\""+pageContext.getServletContext().getContextPath()+"/admin/school/majors/page/"+(pageNum-1)+"\">Prev</a></li>");
 						}
 						//页码 class="active"
-						for(int i = 1;i<=pages;++i){
-							out.print("<li "+(i==pageNum?"class=\"active\"":"")+"><a href=\""+pageContext.getServletContext().getContextPath()+"/admin/school/majors/page/"+i+"\">"+i+"</a></li>");
+						int index = pageNum<8?1:(pageNum-4);
+						for(int i = index;i<=pages;++i){
+							if(i-index>=8){
+								if(i-index==9)
+								out.print("<li><a href=\"javascript:void(0);\">...</a></li>");
+								else
+								continue;
+							}else{
+								out.print("<li "+(i==pageNum?"class=\"active\"":"")+"><a href=\""+pageContext.getServletContext().getContextPath()+"/admin/school/classes/page/"+i+"\">"+i+"</a></li>");
+							}
 						}
-						
 						//后一页
 						if(pageNum==pages){
 							out.print("<li><a href=\"javascript:void(0);\">Next</a></li>");
@@ -123,6 +134,6 @@
 
 <!--end-main-container-part-->
 <jsp:include page="admin_footer.jsp"></jsp:include>
-<script src="${pageContext.request.contextPath}/static/js/admin/page/school/major.js"></script>
-</body>
+<%-- <script src="${pageContext.request.contextPath}/static/js/admin/page/school/major.js"></script>
+ --%></body>
 </html>

@@ -76,7 +76,7 @@ function createComment(mode, cNo, content, parent_pccid, reply_uid) {
 			}
 			if(data.state==1){
 				if (mode == "directReply") {
-					location.href = "comment?tab=myComment";
+					location.href = domain+"/main/user/comment/receive";
 					return;
 				}
 				location.reload();

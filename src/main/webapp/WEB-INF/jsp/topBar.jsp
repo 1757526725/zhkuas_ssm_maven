@@ -89,10 +89,10 @@
 							<ul class="dropdown-menu">
 								<li><a href="${pageContext.request.contextPath}/main/user/comment/me">我的评论</a>
 								</li>
-								<li><a href="${pageContext.request.contextPath}/main/user/comment">收到的评论</a>
-								</li>
+								<li><a href="${pageContext.request.contextPath}/main/user/comment/receive">收到的评论</a>
+<%-- 								</li>
 								<li><a href="${pageContext.request.contextPath}/main/user/avator">修改头像</a>
-								</li>
+								</li> --%>
 								<li><a href="${pageContext.request.contextPath}/main/user/curriculum/schedule">我的课表</a>
 								</li>
 								<li><a href="${pageContext.request.contextPath}/main/user/passport">个人资料</a>

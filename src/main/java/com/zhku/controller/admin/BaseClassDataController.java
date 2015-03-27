@@ -15,7 +15,7 @@ import com.zhku.service.db.IBaseClassService;
 import com.zhku.web.Constants.PageSize;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/school")
 public class BaseClassDataController {
 	@Autowired
 	private IBaseClassService baseClassService;

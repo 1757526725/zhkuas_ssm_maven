@@ -81,9 +81,9 @@
 									<c:forEach var="major" items="${majorList}">
 										<tr>
 											<td><input type="checkbox"></td>
-											<td class="text-center">${major.name }</td>
+											<td class="text-center">${major.name}</td>
 											<td class="text-center">${major.no}</td>
-											<td class="text-center"><c:out value="${major.academy.name}"default="${currentAcademy.name}"></c:out></td>
+											<td class="text-center"><c:out value="${major.academy.name}" default="${currentAcademy.name}"></c:out></td>
 											<td class="text-center"><a href="javascript:;">查看班级</a></td>
 										</tr>
 									</c:forEach>
@@ -133,7 +133,7 @@
 
 
 <!--end-main-container-part-->
-<jsp:include page="admin_footer.jsp"></jsp:include>
+<jsp:include  page="admin_footer.jsp"></jsp:include>
 <script src="${pageContext.request.contextPath}/static/js/admin/page/school/major.js"></script>
 </body>
 </html>

@@ -81,7 +81,7 @@
 											<td><input type="checkbox"></td>
 											<td class="text-center">${building.name }</td>
 											<td class="text-center">${building.no}</td>
-											<td class="text-center"><c:out value="${building.campusArea.name}"default="${currentCampus.name}"></c:out></td>
+											<td class="text-center"><c:out value="${building.campusArea.name}" default="${currentCampus.name}"></c:out></td>
 											<td class="text-center"><a href="javascript:;">${fn:length(building.classrooms)}</a></td>
 										</tr>
 									</c:forEach>

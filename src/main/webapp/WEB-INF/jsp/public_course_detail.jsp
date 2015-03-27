@@ -121,7 +121,8 @@
 							</button>
 						</c:otherwise>
 					</c:choose>
-
+						<input type="hidden" name="termNo" value="${term.no}"/>
+						<input type="hidden" name="campusId" value="${campus.id}"/>
 				</div>
 				<div id="comment" class="well clearfix">
 					<textarea name="content" class="form-control pull-left"
@@ -260,6 +261,8 @@
 		</div>
 		<div style="clear:both;"></div>
 		<jsp:include page="footer.jsp"></jsp:include>
+		<script src="${pageContext.request.contextPath}/static/js/module/publicCoruse.js"></script>
+		<script src="${pageContext.request.contextPath}/static/js/module/comment.js"></script>
 		<script src="${pageContext.request.contextPath}/static/js/courseDetail/courseDetailPage.js"></script>
 	</div>
 </body>

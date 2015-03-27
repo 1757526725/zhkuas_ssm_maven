@@ -57,7 +57,7 @@
 											<td class="text-center">${campus.name}</td>
 											<td class="text-center">${campus.id }</td>
 											<td class="text-center">${fn:length(campus.buildingList)}</td>
-											<td class="text-center">${fn:length(campus.classList)}</td>
+											<td class="text-center"><span style="display:inline-block;width:20px;">${fn:length(campus.classList)}</span>| <a href="javascript:void(0)" class="text-primary" > 编辑班级</a></td>
 										</tr>
 
 									</c:forEach>

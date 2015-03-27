@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import zhku.jackcan.webCrawler.exception.FetchTimeoutException;
 
 import com.zhku.bean.BaseClass;
+import com.zhku.bean.Pagination;
+import com.zhku.bean.PublicCourseComment;
 import com.zhku.bean.Student;
 import com.zhku.bean.Term;
 import com.zhku.bean.User;
@@ -26,11 +28,14 @@ import com.zhku.exception.ValidateCodeIncorrectException;
 import com.zhku.module.fetchData.FetchHelper;
 import com.zhku.module.fetchData.bo.StudentPage;
 import com.zhku.service.db.IBaseClassService;
+import com.zhku.service.db.IPublicCourseCommentService;
 import com.zhku.service.db.IStudentService;
 import com.zhku.service.db.ITermService;
 import com.zhku.service.db.IUserService;
 import com.zhku.service.network.impl.WebLogin;
+import com.zhku.utils.RegExpValidator;
 import com.zhku.utils.WebUtils;
+import com.zhku.web.Constants;
 import com.zhku.web.Constants.Error;
 import com.zhku.web.Constants.SessionKey;
 
@@ -45,6 +50,55 @@ public class UserPanelController {
 	private IStudentService studentService;
 	@Autowired
 	private IUserService userService ;
+	@Autowired
+	private IPublicCourseCommentService publicCourseCommentService;
+	@RequestMapping("/comment/me")
+	public String showMyComment(HttpSession session,HttpServletRequest request){
+		User user = SecurityUtil.getUser(session);
+		if(user==null){
+			session.setAttribute("message", "你已经退出登录，请登录后重试" );
+			return "error";
+		}
+		String currentPage =request.getParameter("currentPage");
+		Pagination<PublicCourseComment> pagination = new Pagination<PublicCourseComment>();
+		pagination.setPageSize(Constants.PageSize.MY_COMMENT.getSize());
+		if(currentPage==null || !RegExpValidator.IsIntNumber(currentPage)){
+			pagination.setCurrentPage(1);
+		}else{
+			pagination.setCurrentPage(Integer.valueOf(currentPage));
+		}
+		List<PublicCourseComment> comments = publicCourseCommentService.getPublicCourseCommentsByUid(user.getUid());
+		pagination.setPageDataList(comments);
+		request.setAttribute("pagination", pagination);
+		return "mycomment";
+	}
+	@RequestMapping("/comment/receive")
+	public String showCommentsReplyMe(HttpSession session,HttpServletRequest request){
+		User user = SecurityUtil.getUser(session);
+		if(user==null){
+			session.setAttribute("message", "你已经退出登录，请登录后重试" );
+			return "error";
+		}
+		String currentPage =request.getParameter("currentPage");
+		Pagination<PublicCourseComment> pagination = new Pagination<PublicCourseComment>();
+		pagination.setPageSize(Constants.PageSize.MY_COMMENT.getSize());
+		if(currentPage==null || !RegExpValidator.IsIntNumber(currentPage)){
+			pagination.setCurrentPage(1);
+		}else{
+			pagination.setCurrentPage(Integer.valueOf(currentPage));
+		}
+		List<PublicCourseComment> comments = publicCourseCommentService.getPublicCourseCommentReplyByUid(user.getUid());
+		pagination.setPageDataList(comments);
+		request.setAttribute("pagination", pagination);
+		for(PublicCourseComment comment :comments){
+			if(comment.getState()==0){
+				comment.setState(1);
+				publicCourseCommentService.updatePublicCourseComment(comment);
+			}
+		}
+		return "commentReplyMe";
+	}
+	
 	@RequestMapping(value={"","/passport"})
 	public String showPassport(HttpSession session,HttpServletRequest request){
 		if(!SecurityUtil.checkLogin(session)){
@@ -178,5 +232,13 @@ public class UserPanelController {
 	}
 	public void setTermService(ITermService termService) {
 		this.termService = termService;
+	}
+
+	public IPublicCourseCommentService getPublicCourseCommentService() {
+		return publicCourseCommentService;
+	}
+
+	public void setPublicCourseCommentService(IPublicCourseCommentService publicCourseCommentService) {
+		this.publicCourseCommentService = publicCourseCommentService;
 	}
 }
