@@ -39,7 +39,7 @@
 		zk_organization.organizationName,
 		zk_organization.organizationTypeId,
 		zk_organization.organizationNo,
-		zk_campus_class_rs.ccrsid,
+		zk_campus_class_rs.campusClassRSId,
 		zk_campus.campusId,
 		zk_campus.campusName
 	</sql>

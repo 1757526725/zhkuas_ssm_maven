@@ -125,7 +125,7 @@ public class Constants {
 
 	public enum PageSize {
 		MY_COMMENT(8), REPLYME_COMMENT(8),ADMIN_MAJOR(12), ADMIN_COURSE(12), ADMIN_CLASS(12),
-		ADMIN_SCHOOL_USER_LIST(12), ADMIN_CLASSROOM(12);
+		ADMIN_SCHOOL_USER_LIST(12), ADMIN_CLASSROOM(12), COMMON_SIZE(12);
 		private int size;
 
 		PageSize(int size) {

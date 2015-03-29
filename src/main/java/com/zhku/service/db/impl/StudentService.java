@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zhku.bean.Pagination;
+import com.github.pagehelper.PageHelper;
 import com.zhku.bean.Student;
 import com.zhku.dao.StudentMapper;
 import com.zhku.service.db.IStudentService;
@@ -43,15 +43,15 @@ public class StudentService implements IStudentService{
 		studentMapper.updateStudent(student);
 	}
 
-	@Override
-	public Pagination<Student> getStudentsByPagination(Pagination<Student> pagination) {
-		Pagination<Student> paginationTemp = studentMapper.getStudentsByPagination(pagination);
-		if(paginationTemp!=null){
-			paginationTemp.setCurrentPage(pagination.getCurrentPage());
-			paginationTemp.setPageSize(pagination.getPageSize());
-		}
-		return paginationTemp;
-	}
+//	@Override
+//	public Pagination<Student> getStudentsByPagination(Pagination<Student> pagination) {
+//		Pagination<Student> paginationTemp = studentMapper.getStudentsByPagination(pagination);
+//		if(paginationTemp!=null){
+//			paginationTemp.setCurrentPage(pagination.getCurrentPage());
+//			paginationTemp.setPageSize(pagination.getPageSize());
+//		}
+//		return paginationTemp;
+//	}
 
 	public StudentMapper getStudentMapper() {
 		return studentMapper;
@@ -59,6 +59,17 @@ public class StudentService implements IStudentService{
 
 	public void setStudentMapper(StudentMapper studentMapper) {
 		this.studentMapper = studentMapper;
+	}
+
+	@Override
+	public List<Student> getStudents(int pageNum, int pageSize, boolean needCountTotal) {
+		PageHelper.startPage(pageNum, pageSize, needCountTotal);
+		return studentMapper.getStudents();
+	}
+
+	@Override
+	public List<Student> getStudentsByKeyword(String keyword) {
+		return studentMapper.getStudentsByKeyword(keyword);
 	}
 
 }

@@ -32,9 +32,10 @@
 					<button class="btn btn-success" id="btn-update">
 						<i class="icon-refresh"></i> 更新数据
 					</button>
-					<button class="btn btn-success" id="btn-update">
+					<button class="btn btn-success" id="btn-edit-campus-class">
 						<i class="icon-edit"></i> 编辑(校区-班级)
 					</button>
+					<span class="text-danger text-large">提示:使用右上角的搜索功能可以快速查找到相应的班级！</span>
 					<div class="update-message" style="display:none;">
 						<div>
 							<span class="icon24 icomoon-icon-arrow-up-2 green">LOG:</span>
@@ -44,18 +45,64 @@
 							</div>
 						</div>
 					</div>
-					<div class="btn-group pull-right">
+				<!-- 	<div class="btn-group pull-right">
 						<div class="search">
 						  <input type="text" placeholder="输入班级名称......">
 						  <button type="submit" class="tip-bottom" data-original-title="Search"><i class="icon-search icon-white"></i></button>
 						</div>
-					</div>
+					</div> -->
 					<!--End Action tools-->
+				</div>
+				<div id="edit-advance" class="span12" style="display:none;">
+					<div class="span12">
+						<div class="widget-box">
+							<div class="widget-title">
+								<span class="icon"><i class="icon-ok"></i> </span>
+								<h5>检索数据</h5>
+							</div>
+							<div class="widget-content">
+								<div class="todo">
+									<ul>
+										<li class="clearfix">
+											<div class="span6">
+											<span>年级:</span>
+									  		<select name="grade" style="margin-top: 8px; width: auto;">
+								            	<option value="${grade_all}" selected>全部年级</option>
+								            	<c:forEach var="year" items="${admin_class_years}">
+								            		<option value="${year}">${year}级</option>
+								            	</c:forEach>
+								            </select>
+								            <span>学院:</span>
+								            <select name="acadmey" style="margin-top: 8px;width: auto;">
+								            	<option value="all" selected>全部学院</option>
+								            	<c:forEach var="acadmey" items="${admin_class_acadmeys}">
+								            		<option value="${acadmey.no}">${acadmey.name}</option>
+								            	</c:forEach>
+								            </select> 
+								            <button class="btn btn-success" id="btn-go-search">
+												<i class="icon-arrow-right"></i> 检索
+											</button>
+											
+											</div>
+											<div class="span4 pull-right" style="border: 1px #CDCDCD solid; padding:5px 5px 0;height: 35px; width: 200px; border-radius:4px">
+											<lable><input type="radio" checked name="campusId" value="1" style="margin: 0">海珠校区</lable>
+								            <lable><input type="radio" name="campusId" style="margin: 0" value="3" >白云校区</lable>
+												<button class="btn btn-danger btn-mini" id="btn-save">
+													<i class="icon-ok"></i> 提交
+												</button>
+
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="widget-box">
 					<div class="widget-content nopadding">
 						<form action="#" method="post" class="form-horizontal"
-							id="academy_form">
+							id="baseClass_form">
 							<table class="table table-bordered table-striped with-check">
 								<thead>
 									<tr>
@@ -134,6 +181,6 @@
 
 <!--end-main-container-part-->
 <jsp:include page="admin_footer.jsp"></jsp:include>
-<%-- <script src="${pageContext.request.contextPath}/static/js/admin/page/school/major.js"></script>
- --%></body>
+<script src="${pageContext.request.contextPath}/static/js/admin/page/school/baseClass.js"></script>
+</body>
 </html>

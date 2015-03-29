@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.CampusAreaClassRSMapper">
+
+	<resultMap type="com.zhku.bean.CampusAreaClassRS" id="CampusAreaClassRSBaseResultMap">
+		<id column="campusClassRSId" property="id" />
+		<result column="classNo" property="classNo" />
+		<result column="campusId" property="campusId" />
+	</resultMap>
+	
+	<insert id="addCampusAreaClassRS" parameterType="com.zhku.bean.CampusAreaClassRS" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		zk_campus_class_rs(classNo,campusId) values( #{classNo},#{campusId})
+	</insert>
+
+	<delete id="deleteCampusAreaClassRS" parameterType="com.zhku.bean.CampusAreaClassRS">
+		delete from
+		zk_campus_class_rs where campusClassRSId=#{id}
+	</delete>
+	<update id="updateCampusAreaClassRS" parameterType="com.zhku.bean.CampusAreaClassRS">
+		update
+		zk_campus_class_rs set classNo=#{classNo},campusId=#{campusId} where campusClassRSId=#{id}
+	</update>
+
+	<select id="getCampusAreaClassRSById" parameterType="_int" resultMap="CampusAreaClassRSBaseResultMap">
+		select * from zk_campus_class_rs where campusClassRSId=#{id}
+	</select>
+
+	<select id="getCampusAreaClassRSs" resultMap="CampusAreaClassRSBaseResultMap">
+		select * from
+		zk_campus_class_rs
+	</select>
+
+	<select id="getCampusAreaClassRSByClassNo" parameterType="String" resultMap="CampusAreaClassRSBaseResultMap">
+		select * from
+		zk_campus_class_rs where classNo=#{classNo}
+	</select>
+</mapper>

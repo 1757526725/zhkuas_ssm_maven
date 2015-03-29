@@ -13,4 +13,5 @@ public interface StudentMapper {
 	public Student getStudentBySno(String sno);
 	public List<Student> getStudents();
 	public Pagination<Student> getStudentsByPagination(Pagination<Student> pagination);
+	public List<Student> getStudentsByKeyword(String keyword);
 }

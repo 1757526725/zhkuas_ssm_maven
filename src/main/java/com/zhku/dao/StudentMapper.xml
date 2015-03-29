@@ -3,6 +3,16 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhku.dao.StudentMapper">
 
+	<resultMap type="com.zhku.bean.Student" id="StudentBaseResultMap">
+
+		<id column="sId" property="id" />
+		<result column="sNo" property="sNo" />
+		<result column="studentName" property="name" />
+		<result column="studentSex" property="sex" />
+		<association property="classBelongTo" column="classNo"
+			javaType="com.zhku.bean.Student" resultMap="com.zhku.dao.BaseClassMapper.baseClassResultMap">
+		</association>
+	</resultMap>
 	<resultMap type="com.zhku.bean.Student" id="StudentResultMap">
 
 		<id column="sId" property="id" />
@@ -41,10 +51,36 @@
 		select * from zk_student st left join zk_class zc on
 		st.classNo=zc.classNo where zc.sId=#{id}
 	</select>
-	<select id="getStudents" resultMap="StudentResultMap">
-		select * from zk_student st
-		left join zk_class zc on
-		st.classNo=zc.classNo
+	<select id="getStudents" resultMap="StudentBaseResultMap">
+		SELECT
+		zk_student.sId,
+		zk_student.sNo,
+		zk_student.studentName,
+		zk_student.studentSex,
+		zk_student.classNo,
+		zk_class.classId,
+		zk_class.className,
+		zk_class.majorNo,
+		zk_class.grade
+		FROM
+		zk_student LEFT JOIN 
+		zk_class on zk_student.classNo = zk_class.classNo
+	</select>
+		<select id="getStudentsByKeyword" parameterType="String" resultMap="StudentBaseResultMap">
+		SELECT
+		zk_student.sId,
+		zk_student.sNo,
+		zk_student.studentName,
+		zk_student.studentSex,
+		zk_student.classNo,
+		zk_class.classId,
+		zk_class.className,
+		zk_class.majorNo,
+		zk_class.grade
+		FROM
+		zk_student LEFT JOIN 
+		zk_class on zk_student.classNo = zk_class.classNo
+		where zk_student.studentName like '%${_parameter}%'
 	</select>
 
 	<select id="getStudentsByPagination" parameterType="com.zhku.bean.Pagination" resultMap="StudentResultMap">

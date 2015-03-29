@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.zhku.bean.BaseClass;
+import com.zhku.bean.CampusArea;
 import com.zhku.dao.BaseClassMapper;
 import com.zhku.exception.ObjectExistsException;
 import com.zhku.service.db.IBaseClassService;
 @Service("baseClassServcie")
 public class BaseClassService implements IBaseClassService {
-
+//	private static Pattern gradeParamChecker = Pattern.compile("\\d([ ]*,[ ]*\\d)*?");
 	@Autowired
 	private BaseClassMapper baseClassMapper;
 	@Override
@@ -102,5 +103,32 @@ public class BaseClassService implements IBaseClassService {
 		return baseClassMapper.getBaseClasses();
 	}
 
+	@Override
+	public List<BaseClass> getBaseClassesWithMajorAndCampus() {
+		return baseClassMapper.getBaseClassesWithMajorAndCampus();
+	}
+
+	@Override
+	public List<BaseClass> getBaseClassesWithMajorAndCampus(int pageNum, int pageSize, boolean needCountTotal) {
+		PageHelper.startPage(pageNum, pageSize,needCountTotal);
+		return baseClassMapper.getBaseClassesWithMajorAndCampus();
+	}
+
+	@Override
+	public List<BaseClass> getBaseClassesByGradeAndAcademy(List<String> grade, String acadmeyNo) {
+		StringBuffer sb = new StringBuffer();
+		if(grade==null||grade.size()==0){
+			grade  =null;
+		}else{
+			for(String gd : grade){
+				sb.append(gd).append(",");
+			}
+			sb.deleteCharAt(sb.length()-1);
+		}
+		Map<String,String> params = new HashMap<String,String> ();
+		params.put("grades", grade==null?null:sb.toString());
+		params.put("acadmeyNo",acadmeyNo );
+		return baseClassMapper.getBaseClassesByGradeAndAcademy(params);
+	}
 	
 }

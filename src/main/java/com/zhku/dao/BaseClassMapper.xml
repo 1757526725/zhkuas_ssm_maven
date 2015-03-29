@@ -150,8 +150,29 @@
 	</select>
 
 	<select id="getBaseClassesByClassName" parameterType="String"
-		resultMap="baseClassResultMap">
-		select * from zk_class where className like
+		resultMap="ClassWithCampusAreaResultMap">
+		SELECT
+		zk_class.classId,
+		zk_class.className,
+		zk_class.classNo,
+		zk_class.grade,
+		zk_major.mId,
+		zk_major.majorName,
+		zk_major.majorNo,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_campus_class_rs.campusClassRSId,
+		zk_campus.campusId,
+		zk_campus.campusName
+		FROM
+		zk_class LEFT JOIN 
+		zk_major on zk_class.majorNo = zk_major.majorNo LEFT JOIN 
+		zk_organization on zk_organization.organizationNo = zk_major.academyNo LEFT JOIN 
+		zk_campus_class_rs on zk_campus_class_rs.classNo = zk_class.classNo LEFT JOIN 
+		zk_campus on zk_campus.campusId = zk_campus_class_rs.campusId
+		 where className like
 		'%${_parameter}%'
 	</select>
 
@@ -216,6 +237,58 @@
 		zk_class.classNo=#{no}
 		order by zk_course.cNo
 	</select>
-
-
+	<select id="getBaseClassesWithMajorAndCampus" resultMap="ClassWithCampusAreaResultMap">
+		SELECT
+		zk_class.classId,
+		zk_class.className,
+		zk_class.classNo,
+		zk_class.grade,
+		zk_major.mId,
+		zk_major.majorName,
+		zk_major.majorNo,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_campus_class_rs.campusClassRSId,
+		zk_campus.campusId,
+		zk_campus.campusName
+		FROM
+		zk_class LEFT JOIN 
+		zk_major on zk_class.majorNo = zk_major.majorNo LEFT JOIN 
+		zk_organization on zk_organization.organizationNo = zk_major.academyNo LEFT JOIN 
+		zk_campus_class_rs on zk_campus_class_rs.classNo = zk_class.classNo LEFT JOIN 
+		zk_campus on zk_campus.campusId = zk_campus_class_rs.campusId
+	</select>
+	<select id="getBaseClassesByGradeAndAcademy" parameterType="Map" resultMap="ClassWithCampusAreaResultMap">
+		SELECT
+		zk_class.classId,
+		zk_class.className,
+		zk_class.classNo,
+		zk_class.grade,
+		zk_major.mId,
+		zk_major.majorName,
+		zk_major.majorNo,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_campus_class_rs.campusClassRSId,
+		zk_campus.campusId,
+		zk_campus.campusName
+		FROM
+		zk_class LEFT JOIN 
+		zk_major on zk_class.majorNo = zk_major.majorNo LEFT JOIN 
+		zk_organization on zk_organization.organizationNo = zk_major.academyNo LEFT JOIN 
+		zk_campus_class_rs on zk_campus_class_rs.classNo = zk_class.classNo LEFT JOIN 
+		zk_campus on zk_campus.campusId = zk_campus_class_rs.campusId
+		where 1
+		<if test="grades !=null">
+			and zk_class.grade in (${grades}) 
+		</if>
+		<if test="acadmeyNo !=null">
+			and zk_organization.organizationNo in (${acadmeyNo})
+		</if>
+	</select>
+		
 </mapper>

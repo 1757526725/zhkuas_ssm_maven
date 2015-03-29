@@ -67,7 +67,7 @@
 		zk_school_building.sbId,
 		zk_school_building.schoolBuildingName,
 		zk_school_building.schoolBuildingNo,
-		zk_campus_class_rs.ccrsid,
+		zk_campus_class_rs.campusClassRSId,
 		zk_class.classNo
 		FROM
 		zk_campus LEFT JOIN zk_campus_class_rs on zk_campus.campusId = zk_campus_class_rs.campusId LEFT JOIN 
