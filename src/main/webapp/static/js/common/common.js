@@ -29,7 +29,8 @@ $(document).ready(function() {
 							.click(function() {
 								// alert("新浪微博登录功能未开通，敬请期待。");
 								bt_sina_login.button('loading');
-								window.open(authoHost+'/weibo/login?service='+domain, '_self');
+//								window.open(authoHost+'/weibo/login?service='+domain, '_self');
+								window.open(domain+'/weibo/login', '_self');
 							});
 });
 function deleteComment(pccid) {

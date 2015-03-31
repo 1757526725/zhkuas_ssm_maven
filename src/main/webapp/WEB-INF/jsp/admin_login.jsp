@@ -54,7 +54,7 @@
 				</div>
 			</c:if>
 			<div class="form-actions">
-				<a class="weibo_login pull-left" href="javascript:;"><span>使用微博登陆
+				<a class="weibo_login pull-left" href="${pageContext.request.contextPath}/weibo/login"><span>使用微博登陆
 				</span><i></i> </a>
 				<!-- <span class="pull-left"><a href="#" class="flip-link btn btn-info" id="to-recover">Lost password?</a></span> -->
 				<span class="pull-right"><a type="submit" href="javascript:;"
