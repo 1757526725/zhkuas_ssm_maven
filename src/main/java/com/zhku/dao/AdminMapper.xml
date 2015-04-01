@@ -32,7 +32,7 @@
 		from zk_admin ad left join zk_user u on ad.uId=u.uId left join zk_student st on u.sNo=st.sNo left join
 		zk_class zc on
 		st.classNo=zc.classNo where ad.adminName = #{username} and ad.adminPwd = #{password}
-		<if test="user.sinaUid!=null">or u.sinaUid = ${user.sinaUid}</if>
+		<if test="user!=null and user.sinaUid!=null">or u.sinaUid = ${user.sinaUid}</if>
 	</select>
 	<select id="getAdminUserBySinaUid" parameterType="String" resultMap="AdminResultMap">
 		select * from  zk_admin a  left join zk_user u on  u.uId=a.uId left join zk_student st on u.sNo=st.sNo left
