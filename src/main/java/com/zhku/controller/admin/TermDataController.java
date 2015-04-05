@@ -23,10 +23,10 @@ import com.zhku.service.db.impl.TermService;
 import com.zhku.web.Constants;
 @Controller
 @RequestMapping("/admin/term")
-public class TermController {
+public class TermDataController {
 	@Autowired
 	private TermService termService;
-	private final Log logger = LogFactory.getLog(TermController.class);
+	private final Log logger = LogFactory.getLog(TermDataController.class);
 	@RequestMapping(method=RequestMethod.GET)
 	public String show(Model model){
 		List<Term> terms=termService.getTerms();

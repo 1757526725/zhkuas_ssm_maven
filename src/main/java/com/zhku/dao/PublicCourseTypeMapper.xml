@@ -10,5 +10,8 @@
 	<select id="getPublicCourseTypeById" parameterType="_int" resultMap="PublicCourseTypeResultMap">
 		select * from zk_public_course_type where pctId =#{id}
 	</select>
+	<select id="getPublicCourseTypes"  resultMap="PublicCourseTypeResultMap">
+		select * from zk_public_course_type
+	</select>
 	
 </mapper>

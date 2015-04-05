@@ -92,6 +92,7 @@
 		from
 		<include refid="joinRS"/>
 		where zk_term_course.termNo = #{termNo} and zk_public_course.campusId = #{campusId}
+		order by zk_course.cNo
 	</select>
 
 	<select id="getPublicCoursesBytermNoAndCompusIdAndTypeId"

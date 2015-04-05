@@ -1,3 +1,10 @@
+/**fix**/
+#sidebar > ul > li.active > a {
+	background: url("/static/img/menu-active.png") no-repeat scroll right center transparent !important;
+	text-decoration:none;
+}
+
+/**end***/
 .table th.text-center, .table td.text-center{
 	text-align: center;
 }
@@ -107,4 +114,8 @@ color: #fff;
 }
 #edit-advance{
 	margin-left:0px;
+}
+
+.rank label{
+	display: inline-block;
 }

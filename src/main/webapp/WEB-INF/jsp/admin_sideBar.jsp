@@ -27,8 +27,8 @@
         <li><a href="${pageContext.request.contextPath}/admin/course">课程信息管理</a></li>
         <li><a href="${pageContext.request.contextPath}/admin/course/termcourse">学期课程管理</a></li>
         <li><a href="${pageContext.request.contextPath}/admin/course/class/courses">班级课程管理</a></li>
-        <li><a href="${pageContext.request.contextPath}/admin/course/publiccourse">公选课程管理</a></li>
-        <li><a href="${pageContext.request.contextPath}/admin/course/publiccourse/type">公选课分类管理</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/course/public">公选课程管理</a></li>
+        <li><a href="${pageContext.request.contextPath}/admin/course/profiles">课程详情管理</a></li>
       </ul>
     </li>
      <li class="submenu"> <a href="#"><i class="icon icon-info-sign"></i> <span>评价管理</span></a>

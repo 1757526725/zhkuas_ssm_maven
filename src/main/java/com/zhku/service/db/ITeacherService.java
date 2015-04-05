@@ -10,6 +10,7 @@ public interface ITeacherService {
 	public void deleteTeacher(Teacher teacher);
 	public Teacher getTeacherById(int tId);
 	public List<Teacher> getTeachers();
+	public List<Teacher> getTeachers(int pageNum,int pageSize,boolean needCountTotal);
 	public Teacher getTeacherByTno(String tNo);
 	public void updateTeacher(Teacher teacher);
 	public Teacher getTeacherByTnameNo(String tNameNo);

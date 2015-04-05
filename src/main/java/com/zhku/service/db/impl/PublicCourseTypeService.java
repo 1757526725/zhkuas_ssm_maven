@@ -1,5 +1,7 @@
 package com.zhku.service.db.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,10 @@ public class PublicCourseTypeService implements IPublicCourseTypeService{
 	}
 	public void setPublicCourseTypeMapper(PublicCourseTypeMapper publicCourseTypeMapper) {
 		this.publicCourseTypeMapper = publicCourseTypeMapper;
+	}
+	@Override
+	public List<PublicCourseType> getPublicCourseTypes() {
+		return this.publicCourseTypeMapper.getPublicCourseTypes();
 	}
 
 }

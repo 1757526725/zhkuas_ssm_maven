@@ -8,7 +8,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.zhku.web.Constants;
-
+/**
+ * 管理员权限拦截器
+ * @author JackCan
+ *
+ */
 public class AdminSecurityInterceptor implements HandlerInterceptor{
 
 	private static final String LOGIN_URL = "login";

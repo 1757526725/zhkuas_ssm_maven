@@ -32,7 +32,13 @@
 	</select>
 
 	<select id="getTeachers" resultMap="teacherResultMap">
-		select * from zk_teacher ;
+		SELECT
+			zk_teacher.tId,
+			zk_teacher.tNo,
+			zk_teacher.teacherName,
+			zk_teacher.teacherNameNo
+			FROM
+			zk_teacher
 	</select>
 
 	<update id="updateTeacher" parameterType="com.zhku.bean.Teacher">
