@@ -1,6 +1,7 @@
 package com.zhku.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -12,13 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.zhku.bean.Course;
+import com.zhku.bean.PublicCourse;
 import com.zhku.bean.PublicCourseComment;
 import com.zhku.bean.PublicCourseProfiles;
+import com.zhku.bean.PublicCourseType;
 import com.zhku.bean.RemarkRecord;
 import com.zhku.bean.User;
 import com.zhku.controller.util.SecurityUtil;
+import com.zhku.service.db.ICourseService;
 import com.zhku.service.db.IPublicCourseCommentService;
 import com.zhku.service.db.IPublicCourseProfilesService;
+import com.zhku.service.db.IPublicCourseService;
+import com.zhku.service.db.IPublicCourseTypeService;
 import com.zhku.service.db.IRemarkRecordService;
 import com.zhku.utils.WebUtils;
 import com.zhku.web.Constants.Error;
@@ -31,13 +38,62 @@ import com.zhku.web.Constants.Error;
 @Controller
 @RequestMapping("/main/ws/")
 public class CourseWSController {
-	
+	@Autowired
+	private ICourseService courseService;
 	@Autowired
 	private IRemarkRecordService remarkRecordService;
 	@Autowired
 	private IPublicCourseProfilesService publicCourseProfilesService;
 	@Autowired
 	private IPublicCourseCommentService publicCourseCommentService;
+	@Autowired
+	private IPublicCourseTypeService publicCourseTypeService;
+	@Autowired
+	private IPublicCourseService publicCourseService;
+	
+	@ResponseBody
+	@RequestMapping("course/public/types")
+	public Map<String ,Object> getPublicCourseTypeList(){
+		List<PublicCourseType> list = publicCourseTypeService.getPublicCourseTypes();
+		return WebUtils.webJsonResult(list);
+	}
+	
+	
+	/**
+	 * 按校区、学期、类型获取到公选列表
+	 * @param termNo
+	 * @param campusId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("course/public/campus/{campusId}/term/{termNo}/type/{typeId}")
+	public Map<String,Object> getPublicCourseList(@PathVariable String termNo,@PathVariable Integer campusId,@PathVariable Integer typeId){
+		List<PublicCourse> publicCourses = publicCourseService.getPublicCoursesByTermNoAndCampusIdAndTypeId(termNo, campusId, typeId);
+		return WebUtils.webJsonResult(publicCourses);
+	}
+	/**
+	 * 按校区、学期获取到公选列表
+	 * @param termNo
+	 * @param campusId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("course/public/campus/{campusId}/term/{termNo}")
+	public Map<String,Object> getPublicCourseList(@PathVariable String termNo,@PathVariable Integer campusId){
+		List<PublicCourse> publicCourses = publicCourseService.getPublicCoursesByTermNoAndCampusId(termNo, campusId);
+		return WebUtils.webJsonResult(publicCourses);
+	}
+	
+	/**
+	 * 获取课程详情
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("course/{cNo}/details")
+	public Map<String,Object> getCourseDetailData(@PathVariable String cNo){
+		Course course = courseService.getCourseWitchDetailByCno(cNo);
+		return WebUtils.webJsonResult(course);
+	}
 	
 	/**
 	 * 删除评论 
@@ -194,5 +250,29 @@ public class CourseWSController {
 
 	public void setPublicCourseCommentService(IPublicCourseCommentService publicCourseCommentService) {
 		this.publicCourseCommentService = publicCourseCommentService;
+	}
+
+	public ICourseService getCourseService() {
+		return courseService;
+	}
+
+	public void setCourseService(ICourseService courseService) {
+		this.courseService = courseService;
+	}
+
+	public IPublicCourseTypeService getPublicCourseTypeService() {
+		return publicCourseTypeService;
+	}
+
+	public void setPublicCourseTypeService(IPublicCourseTypeService publicCourseTypeService) {
+		this.publicCourseTypeService = publicCourseTypeService;
+	}
+
+	public IPublicCourseService getPublicCourseService() {
+		return publicCourseService;
+	}
+
+	public void setPublicCourseService(IPublicCourseService publicCourseService) {
+		this.publicCourseService = publicCourseService;
 	}
 }
