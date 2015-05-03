@@ -1,7 +1,9 @@
 package com.zhku.service.db.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,14 +76,6 @@ public class TermService implements ITermService {
 
 	@Override
 	public List<Term> getAvailabelTerms() {
-//		Object obj = CacheUtils.get("zk_term_getAvailabelTerms");
-//		if(obj!=null){
-//			return (List<Term>) obj;
-//		}else{
-//			List<Term> termList = termMapper.getAvailabelTerms();
-//			CacheUtils.add("zk_term_getAvailabelTerms", termList);
-//			return termList;
-//		}
 		return termMapper.getAvailabelTerms();
 	}
 
@@ -113,6 +107,18 @@ public class TermService implements ITermService {
 			terms.add(currentTerm);
 		}
 		return terms;
+	}
+
+	@Override
+	public Set<String> getSchoolGrades() {
+		Set<String> grades = new HashSet<String>();
+		List<Term> terms = this.termMapper.getTerms();
+		for(Term term :terms){
+			String termNo = term.getNo();
+			String grade = termNo.substring(0, termNo.length()-1);
+			grades.add(grade);
+		}
+		return grades;
 	}
 
 }

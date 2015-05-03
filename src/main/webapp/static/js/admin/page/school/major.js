@@ -26,6 +26,12 @@ var MajorPage = (function(){
 				}
 			});
 		});
+		
+		$("#major_form").on("click","a",function(){
+			//获取班级号
+			var majorNo=$(this).parent().parent().children().eq(2).text();
+			window.location.href=SITE_HOST+"/admin/school/major/"+majorNo+"/classes";
+		});
 	};
 	var _crawMajorsByQueue= function(queue,interval){
 		if(queue==null) return;

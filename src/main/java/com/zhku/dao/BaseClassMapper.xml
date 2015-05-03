@@ -260,6 +260,30 @@
 		zk_campus_class_rs on zk_campus_class_rs.classNo = zk_class.classNo LEFT JOIN 
 		zk_campus on zk_campus.campusId = zk_campus_class_rs.campusId
 	</select>
+	<select id="getBaseClassesWithMajorAndCampusByMajorNo" parameterType="String" resultMap="ClassWithCampusAreaResultMap">
+		SELECT
+		zk_class.classId,
+		zk_class.className,
+		zk_class.classNo,
+		zk_class.grade,
+		zk_major.mId,
+		zk_major.majorName,
+		zk_major.majorNo,
+		zk_organization.oId,
+		zk_organization.organizationName,
+		zk_organization.organizationTypeId,
+		zk_organization.organizationNo,
+		zk_campus_class_rs.campusClassRSId,
+		zk_campus.campusId,
+		zk_campus.campusName
+		FROM
+		zk_class LEFT JOIN 
+		zk_major on zk_class.majorNo = zk_major.majorNo LEFT JOIN 
+		zk_organization on zk_organization.organizationNo = zk_major.academyNo LEFT JOIN 
+		zk_campus_class_rs on zk_campus_class_rs.classNo = zk_class.classNo LEFT JOIN 
+		zk_campus on zk_campus.campusId = zk_campus_class_rs.campusId
+		where zk_class.majorNo = #{majorNo}
+	</select>
 	<select id="getBaseClassesByGradeAndAcademy" parameterType="Map" resultMap="ClassWithCampusAreaResultMap">
 		SELECT
 		zk_class.classId,

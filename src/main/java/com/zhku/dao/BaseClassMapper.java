@@ -31,4 +31,5 @@ public interface BaseClassMapper {
 	public List<BaseClass> getBaseClassesByMajorNo(String majorNo);
 	public List<BaseClass> getBaseClassesWithMajorAndCampus();
 	public List<BaseClass> getBaseClassesByGradeAndAcademy(Map<String,String> params);
+	public List<BaseClass> getBaseClassesWithMajorAndCampusByMajorNo(String majorNo);
 }

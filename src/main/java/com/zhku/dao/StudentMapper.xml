@@ -66,6 +66,7 @@
 		zk_student LEFT JOIN 
 		zk_class on zk_student.classNo = zk_class.classNo
 	</select>
+	
 		<select id="getStudentsByKeyword" parameterType="String" resultMap="StudentBaseResultMap">
 		SELECT
 		zk_student.sId,
@@ -82,7 +83,22 @@
 		zk_class on zk_student.classNo = zk_class.classNo
 		where zk_student.studentName like '%${_parameter}%'
 	</select>
-
+	<select id="getStudentsByClassNo" parameterType="String" resultMap="StudentBaseResultMap">
+		SELECT
+		zk_student.sId,
+		zk_student.sNo,
+		zk_student.studentName,
+		zk_student.studentSex,
+		zk_student.classNo,
+		zk_class.classId,
+		zk_class.className,
+		zk_class.majorNo,
+		zk_class.grade
+		FROM
+		zk_student LEFT JOIN 
+		zk_class on zk_student.classNo = zk_class.classNo
+		where zk_student.classNo =#{classNo}
+	</select>
 	<select id="getStudentsByPagination" parameterType="com.zhku.bean.Pagination" resultMap="StudentResultMap">
 		select * from zk_student st
 		left join zk_class zc on

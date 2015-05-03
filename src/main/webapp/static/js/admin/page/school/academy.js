@@ -44,6 +44,12 @@ var AcadmeyPage = (function(){
 				_crawAcademyData();
 			});
 		});
+		
+		$("#academy_form").on("click","a",function(){
+			//获取班级号
+			var academyNo=$(this).parent().parent().children().eq(2).text();
+			window.location.href=SITE_HOST+"/admin/school/academy/"+academyNo+"/majors";
+		});
 	};
 	var _saveToDB = function(){
 		Util.ajax.put("academys","JSON",{step:2},function(jsonData){

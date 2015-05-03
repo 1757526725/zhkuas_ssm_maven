@@ -14,4 +14,6 @@ public interface IStudentService {
 	public void updateStudent(Student student);
 //	public Pagination<Student> getStudentsByPagination(Pagination<Student> pagination);
 	public List<Student> getStudentsByKeyword(String keyword);
+	public List<Student> getStudentsByClassNo(String classNo);
+	public List<Student> getStudentsByClassNo(String classNo, Integer pageNum, int size, boolean needCountTotal);
 }

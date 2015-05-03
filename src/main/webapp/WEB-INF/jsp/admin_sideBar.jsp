@@ -18,7 +18,7 @@
     </li>
     <li class="submenu"> <a href="#"><i class="icon icon-file"></i> <span>用户管理</span></a>
       <ul>
-        <li><a href="#">微博绑定管理</a></li>
+        <li><a href="#">管理员设置</a></li>
         <li><a href="${pageContext.request.contextPath}/admin/account/users">教务网绑定管理</a></li>
       </ul>
     </li>

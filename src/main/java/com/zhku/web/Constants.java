@@ -304,7 +304,7 @@ public class Constants {
 		FETCH_CLASSROOM("fetch_building_classroom_"),FETCH_CLASSROOM_DATA_LIST("fetch_temp_classroom"),
 		FETCH_COURSE_BASICAL("fetch_course_basical_"),FETCH_COURSE_BASICAL_DATA_SET("fetch_temp_coursebasical"),
 		PROGRESS("progress"), LOGIN_REFERER("login_referer"), LOGIN_USER("loginUser"), FETCH_COURSE_FULL_DATA_LIST("fetch_temp_courseFull"), 
-		STUDENT_NO("studentNo");
+		STUDENT_NO("studentNo"), FETCH_MAJOR_BASECLASS("fetch_major_class_"),FETCH_MAJOR_BASECLASS_DATA_LIST("fetch_temp_major_classes");
 		;
 		private String key;
 

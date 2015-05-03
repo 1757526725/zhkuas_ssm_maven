@@ -19,6 +19,7 @@ var BaseClassPage = (function() {
 	};
 	var _initPage = function() {
 		_progressBar = $('.update-message').progressBar();
+		_progressBar.setCurrentProgress(0);
 	};
 	var _initEvent = function() {
 		_btn_search.on("click",_quick_search);
@@ -44,6 +45,94 @@ var BaseClassPage = (function() {
 		_btn_save.click(function(){
 			_save_campus_class_rs();
 		});
+		
+		$("#baseClass_form").on("click","a",function(){
+			//获取班级号
+			var classNo=$(this).parent().parent().children().eq(2).text();
+			window.location.href=SITE_HOST+"/admin/school/students/class/"+classNo;
+		});
+	};
+	
+	var _crawBaseClassData =function(){
+		//先获取专业列表
+		Util.ajax.get(SITE_HOST + "/data/majors/json", "JSON", null,
+				function(data) {
+					// alert(academyList.shift());
+					var majorList = data.result;
+					var taskQueue = [];
+					// 将学院列表载入队列
+					for ( var i = 0; i < majorList.length; i++) {
+						taskQueue.push(majorList[i]);
+					}
+					_progressBar.setCurrentProgress(0);
+					_progressBar.setMaxSize(taskQueue.length);
+					_progressBar.setMessage("专业列表加载完成,开始抓取班级信息.....");
+					_progressBar.show();
+					_crawBaseClassByQueue(taskQueue, 1000);
+				});
+
+	};
+	var _saveToDb = function(){
+		Util.ajax.post(SITE_HOST+ "/admin/school/classes","JSON",{"step" : 3},
+				function(data) {
+					if (data.state == 1) {
+						var addCount = data.result.addCount;
+						var existCount = data.result.existCount;
+						showInfo("结果","添加了"+ addCount+ "个班级，"+ existCount+ "间教室已存在！",3000);
+					}
+		});
+	}
+	// 专业队列抓取 班级信息
+	var _crawBaseClassByQueue = function(queue, interval) {
+		if (queue == null)
+			return;
+		if (interval < 0)
+			interval = 0;
+		if (queue.constructor == Array) {
+			// 如果是队列任务
+			if (queue.length == 0) {
+				// 队列任务结束
+				// 请求服务器 整理 数据
+				Util.ajax.put(SITE_HOST + "/admin/school/classes","JSON",{"step" : 2},
+					function(data) {
+						if (data.state == 1) {
+							var done = data.result.size;
+							showConfirm("确认","抓取完成" + done + "间教室,是否保存数据？",
+								function() {
+									_saveToDb();
+								});
+					}
+				});
+
+				return;
+			}
+			var task = queue.shift();
+			// 发动请求
+			Util.ajax.put(SITE_HOST + "/admin/school/classes", "JSON", {"step": 1,"majorNo":task.no}, function(data) {
+				// 请求成功
+				if (data.state == 1) {
+					_progressBar.setCurrentProgress(((_progressBar
+							.getCurrentProgress() / 100)
+							* _progressBar.getMaxSize() + 1)
+							* 100 / _progressBar.getMaxSize());
+					_progressBar.setMessage(task.no + "：" + task.name
+							+ "......" + data.result);
+				} else {
+					_progressBar.setMessage(task.no + "：" + task.name
+							+ "......出错，加入未完成列表!");
+					_progressBar.addRemainTask(task);
+				}
+				setTimeout(function() {
+					_crawBaseClassByQueue(queue, interval);
+				}, interval);
+			}, function(error) {
+				// 请求失败，将任务添加到未完成任务中
+				_progressBar.addRemainTask(task);
+				queue.push(task);
+			});
+		} else {
+			throw new Error("参数queue需要一个队列！");
+		}
 	};
 	
 	//快速搜索功能

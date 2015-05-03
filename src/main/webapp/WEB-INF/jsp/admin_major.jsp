@@ -64,7 +64,7 @@
 				<div class="widget-box">
 					<div class="widget-content nopadding">
 						<form action="#" method="post" class="form-horizontal"
-							id="academy_form">
+							id="major_form">
 							<table class="table table-bordered table-striped with-check">
 								<thead>
 									<tr>

@@ -26,13 +26,29 @@ public class StudentDataController {
 	@RequestMapping("students")
 	public String show(HttpServletRequest request){
 		List<Student> students = studentService.getStudents(1,PageSize.COMMON_SIZE.getSize(),true);
-		request.setAttribute("students", students);
+		request.setAttribute("dataList", students);
+		request.setAttribute("pagationUrl", "/admin/school/students/page/");
 		return "admin_student";
 	}
 	@RequestMapping("students/page/{pageNum}")
 	public String show(@PathVariable Integer pageNum ,HttpServletRequest request){
 		List<Student> students =studentService.getStudents(pageNum,PageSize.COMMON_SIZE.getSize(),true);
-		request.setAttribute("students", students);
+		request.setAttribute("dataList", students);
+		request.setAttribute("pagationUrl", "/admin/school/students/page/");
+		return "admin_student";
+	}
+	@RequestMapping("students/class/{classNo}")
+	public String show(@PathVariable String classNo ,HttpServletRequest request){
+		List<Student> students =studentService.getStudentsByClassNo(classNo,1,PageSize.COMMON_SIZE.getSize(),true);
+		request.setAttribute("dataList", students);
+		request.setAttribute("pagationUrl", "/admin/school/students/class/"+classNo+"/page/");
+		return "admin_student";
+	}
+	@RequestMapping("students/class/{classNo}/page/{pageNum}")
+	public String show(@PathVariable String classNo ,@PathVariable Integer pageNum ,HttpServletRequest request){
+		List<Student> students =studentService.getStudentsByClassNo(classNo,pageNum,PageSize.COMMON_SIZE.getSize(),true);
+		request.setAttribute("dataList", students);
+		request.setAttribute("pagationUrl", "/admin/school/students/class/"+classNo+"/page/");
 		return "admin_student";
 	}
 	//根据关键字查找学生信息 POST 需要管理员权限

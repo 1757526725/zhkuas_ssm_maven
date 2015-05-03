@@ -51,6 +51,10 @@ public class CourseWSController {
 	@Autowired
 	private IPublicCourseService publicCourseService;
 	
+	/**
+	 * 获取公选课类型列表
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("course/public/types")
 	public Map<String ,Object> getPublicCourseTypeList(){

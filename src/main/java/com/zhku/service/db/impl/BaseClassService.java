@@ -130,5 +130,16 @@ public class BaseClassService implements IBaseClassService {
 		params.put("acadmeyNo",acadmeyNo );
 		return baseClassMapper.getBaseClassesByGradeAndAcademy(params);
 	}
+
+	@Override
+	public List<BaseClass> getBaseClassesWithMajorAndCampusByMajorNo(String majorNo) {
+		return baseClassMapper.getBaseClassesWithMajorAndCampusByMajorNo(majorNo);
+	}
+
+	@Override
+	public List<BaseClass> getBaseClassesWithMajorAndCampusByMajorNo(String majorNo, Integer pageNum, int pageSize, boolean needCountTotal) {
+		PageHelper.startPage(pageNum, pageSize,needCountTotal);
+		return baseClassMapper.getBaseClassesWithMajorAndCampusByMajorNo(majorNo);
+	}
 	
 }

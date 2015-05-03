@@ -97,23 +97,7 @@
 											除了何香凝艺术学院和部分海珠区的大一学生
 										</td>
 									</tr>
-									<c:forEach var="term" items="${terms}">
-										<tr termNo="${term.no }" termId="${term.id }">
-											<td><input type="checkbox"></td>
-											<td>${term.name}<c:if test="${term.current}">
-													<span class="pull-right badge badge-important">默认</span>
-												</c:if>
-											</td>
-											<td class="text-center">${term.no }</td>
-											<td><fmt:formatDate value="${term.beginDate }"
-													pattern="yyyy-MM-dd " />
-											</td>
-											<td><fmt:formatDate value="${term.endDate }"
-													pattern="yyyy-MM-dd " />
-											</td>
-										</tr>
-
-									</c:forEach>
+								
 								</tbody>
 							</table>
 						</form>

@@ -43,15 +43,6 @@ public class StudentService implements IStudentService{
 		studentMapper.updateStudent(student);
 	}
 
-//	@Override
-//	public Pagination<Student> getStudentsByPagination(Pagination<Student> pagination) {
-//		Pagination<Student> paginationTemp = studentMapper.getStudentsByPagination(pagination);
-//		if(paginationTemp!=null){
-//			paginationTemp.setCurrentPage(pagination.getCurrentPage());
-//			paginationTemp.setPageSize(pagination.getPageSize());
-//		}
-//		return paginationTemp;
-//	}
 
 	public StudentMapper getStudentMapper() {
 		return studentMapper;
@@ -70,6 +61,17 @@ public class StudentService implements IStudentService{
 	@Override
 	public List<Student> getStudentsByKeyword(String keyword) {
 		return studentMapper.getStudentsByKeyword(keyword);
+	}
+
+	@Override
+	public List<Student> getStudentsByClassNo(String classNo) {
+		return studentMapper.getStudentsByClassNo(classNo);
+	}
+
+	@Override
+	public List<Student> getStudentsByClassNo(String classNo, Integer pageNum, int pageSize, boolean needCountTotal) {
+		PageHelper.startPage(pageNum, pageSize, needCountTotal);
+		return studentMapper.getStudentsByClassNo(classNo);
 	}
 
 }

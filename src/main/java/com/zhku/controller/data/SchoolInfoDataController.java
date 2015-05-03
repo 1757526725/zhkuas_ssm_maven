@@ -61,6 +61,12 @@ public class SchoolInfoDataController {
 	public Map<String,Object> getAcamdeyList(){
 		return WebUtils.webJsonResult(organizationService.getAcademys());
 	}
+	//获取专业列表
+	@ResponseBody
+	@RequestMapping("/majors/json")
+	public Map<String,Object> getMajorList(){
+		return WebUtils.webJsonResult(majorService.getMajors());
+	}
 	//获取班级列表
 	@ResponseBody
 	@RequestMapping("/classes/json")

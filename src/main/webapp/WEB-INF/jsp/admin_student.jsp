@@ -1,5 +1,4 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%@page import="com.github.pagehelper.Page"%> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -18,7 +17,7 @@
 				class="icon-home"></i> 首页</a> <a href="${pageContext.request.contextPath}/admin/school/students" class="current">所有学生</a>
 		</div>
 	</div>
-	<!--End-breadcrumbs-->
+	<!--End-breadcrumbs--> 
 
 	<!--container-fluid-->
 	<div class="container-fluid">
@@ -50,7 +49,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach var="student" items="${students}">
+									<c:forEach var="student" items="${dataList}">
 										<tr>
 											<td><input type="checkbox"></td>
 											<td class="text-center">${student.id }</td>
@@ -65,47 +64,7 @@
 						</form>
 					</div>
 				</div>
-			<%
-				Object ob =request.getAttribute("students");
-				if(ob!=null&& ob instanceof  Page){
-					Page pageList = (Page) ob;
-					//大于一页的时候
-					int pages = pageList.getPages();
-					int pageNum = pageList.getPageNum();
-					if(pages>1){
-					
-						//前一页
-						out.print("<div class=\"pagination\">");
-						out.print("<ul>");
-						if(pageNum==1){
-							out.print("<li><a href=\"javascript:void(0);\">Prev</a></li>");
-						}else{
-							out.print("<li><a href=\""+pageContext.getServletContext().getContextPath()+"/admin/school/students/page/"+(pageNum-1)+"\">Prev</a></li>");
-						}
-						//页码 class="active"
-						int index = pageNum<8?1:(pageNum-4);
-						for(int i = index;i<=pages;++i){
-							if(i-index>=8){
-								if(i-index==9)
-								out.print("<li><a href=\"javascript:void(0);\">...</a></li>");
-								else
-								continue;
-							}else{
-								out.print("<li "+(i==pageNum?"class=\"active\"":"")+"><a href=\""+pageContext.getServletContext().getContextPath()+"/admin/school/students/page/"+i+"\">"+i+"</a></li>");
-							}
-						}
-						
-						//后一页
-						if(pageNum==pages){
-							out.print("<li><a href=\"javascript:void(0);\">Next</a></li>");
-						}else{
-							out.print("<li><a href=\""+pageContext.getServletContext().getContextPath()+"/admin/school/students/page/"+(pageNum+1)+"\">Next</a></li>");
-						}
-						out.print("</ul>");
-						out.print("</div>");
-					}
-				}
-			 %>
+			<jsp:include page="include/admin_pagation.jsp"></jsp:include>
 			</div>
 		</div>
 	</div>

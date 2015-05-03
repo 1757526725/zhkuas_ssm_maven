@@ -3,6 +3,7 @@ package com.zhku.service.db.impl;
 import static org.junit.Assert.fail;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,6 +30,13 @@ public class TermServiceTest {
 		System.out.println(JSON.toJSON(list));
 	}
 
+	@Test
+	public void testGetGrades(){
+		Set<String> set = termService.getSchoolGrades();
+	System.out.println(JSON.toJSONString(set));
+	}
+	
+	
 	public ITermService getTermService() {
 		return termService;
 	}

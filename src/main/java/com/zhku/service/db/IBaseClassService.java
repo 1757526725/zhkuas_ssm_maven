@@ -21,4 +21,6 @@ public interface IBaseClassService {
 	public List<BaseClass> getBaseClassesByClassName(String keyWord);
 	public List<BaseClass> getBaseClassesByMajorNo(String majorNo);
 	public List<BaseClass> getBaseClassesByGradeAndAcademy(List<String> grade, String acadmeyNo);
+	public List<BaseClass> getBaseClassesWithMajorAndCampusByMajorNo(String majorNo);
+	public List<BaseClass> getBaseClassesWithMajorAndCampusByMajorNo(String majorNo, Integer pageNum, int pageSize, boolean needCountTotal);
 }

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhku.dao.NoticeMapper">
+
+	<resultMap type="com.zhku.bean.Notice" id="NoticeBaseResultMap">
+		<id column="noticeId" property="id" />
+		<result column="content" property="content" />
+		<association property="term" column="termNo" resultMap="com.zhku.dao.TermMapper.TermBaseResultMap"></association>
+	</resultMap>
+	
+	<insert id="addNotice" parameterType="com.zhku.bean.Notice">
+		insert into
+		zk_notice(content,termNo) values(#{content},#{term.no})
+	</insert>
+	<delete id="deleteNotice" parameterType="com.zhku.bean.Notice">
+		delete from
+		zk_notice where noticeId=#{id}
+	</delete>
+
+	<update id="updateNotice" parameterType="com.zhku.bean.Notice">
+		update
+		zk_notice set content=#{content}, termNo=#{term.no} where noticeId=#{id}
+	</update>
+	<select id="getNoticeById" parameterType="_int" resultMap="NoticeBaseResultMap">
+		SELECT
+		zk_notice.noticeId,
+		zk_notice.content,
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.termNo,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_term.`status`
+		FROM
+		zk_notice left join 
+		zk_term on zk_notice.termNo = zk_term.termNo
+		where zk_notice.noticeId = #{id}
+	</select>
+	<select id="getNoticeByTermNo" parameterType="String" resultMap="NoticeBaseResultMap">
+		SELECT
+		zk_notice.noticeId,
+		zk_notice.content,
+		zk_term.termId,
+		zk_term.termName,
+		zk_term.termNo,
+		zk_term.beginDate,
+		zk_term.endDate,
+		zk_term.`status`
+		FROM
+		zk_notice left join 
+		zk_term on zk_notice.termNo = zk_term.termNo
+		where zk_term.termNo = #{termNo}
+	</select>
+</mapper>

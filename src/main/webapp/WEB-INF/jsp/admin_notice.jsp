@@ -37,7 +37,7 @@
 			        <div class="control-group">
 			          <form>
 			            <div class="controls">
-			              <textarea class="textarea_editor span12" rows="17" placeholder="Enter text ..."></textarea>
+			              <textarea class="textarea_editor span12" rows="17" placeholder="Enter text ...">${notice.content}</textarea>
 			            </div>
 			          </form>
 			        </div>
