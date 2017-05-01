@@ -20,4 +20,4 @@
 
 ## 论文的预览
 
-![这里随便填写 ] (https://raw.githubusercontent.com/liaojiacan/assets/master/zhkuas/main%20func.png);
+![这里随便填写 ](https://raw.githubusercontent.com/liaojiacan/assets/master/zhkuas/main%20func.png);
