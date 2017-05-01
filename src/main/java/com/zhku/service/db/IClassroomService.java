@@ -15,4 +15,6 @@ public interface IClassroomService {
 	public List<Classroom> getClassrooms();
 	public List<Classroom> getClassrooms(int pageNum,int pageSize,boolean needCountTotal);
 	public List<Classroom> getClassroomsBySchoolBuildingNo(String schoolBuildingNo);
+	public List<Classroom> getClassroomsByKeywork(String keyword);
+	List<Classroom> getClassroomsByKeywork(String keyword, int pageNum, int pageSize, boolean needCountTotal);
 }

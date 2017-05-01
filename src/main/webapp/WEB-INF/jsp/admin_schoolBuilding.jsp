@@ -82,7 +82,7 @@
 											<td class="text-center">${building.name }</td>
 											<td class="text-center">${building.no}</td>
 											<td class="text-center"><c:out value="${building.campusArea.name}" default="${currentCampus.name}"></c:out></td>
-											<td class="text-center"><a href="javascript:;">共  ${fn:length(building.classrooms)}间</a></td>
+											<td class="text-center"><a href="javascript:;">共${fn:length(building.classrooms)}间</a></td>
 										</tr>
 									</c:forEach>
 								</tbody>

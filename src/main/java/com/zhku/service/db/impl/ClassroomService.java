@@ -74,6 +74,15 @@ public class ClassroomService implements IClassroomService {
 		return classroomMapper.getClassrooms();
 	}
 
+	@Override
+	public List<Classroom> getClassroomsByKeywork(String keyword) {
+		return classroomMapper.getClassroomsByKeywork(keyword);
+	}
 
+	@Override
+	public List<Classroom> getClassroomsByKeywork(String keyword ,int pageNum, int pageSize, boolean needCountTotal) {
+		PageHelper.startPage(pageNum, pageSize, needCountTotal);
+		return classroomMapper.getClassrooms();
+	}
 
 }

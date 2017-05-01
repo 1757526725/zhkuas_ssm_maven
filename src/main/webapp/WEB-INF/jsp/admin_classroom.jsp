@@ -40,7 +40,7 @@
 							<li class="divider"></li>
 						</c:if>
 						<c:forEach var="building" items="${buildings}">
-							<li><a href="${pageContext.request.contextPath}/admin/school/building/${building.no}/classroom">${building.name}</a></li>
+							<li><a href="${pageContext.request.contextPath}/admin/school/building/${building.no}/classrooms">${building.name}</a></li>
 						</c:forEach>
 						</ul>
 					</div>

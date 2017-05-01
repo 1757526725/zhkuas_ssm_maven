@@ -1,63 +1,26 @@
 package com.zhku.module.fetchData;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import zhku.jackcan.webCrawler.BasicNameValuePair;
-import zhku.jackcan.webCrawler.FetchUrl;
-import zhku.jackcan.webCrawler.FetchUrlFactory;
-import zhku.jackcan.webCrawler.NameValuePair;
-import zhku.jackcan.webCrawler.exception.FetchTimeoutException;
-
-import com.zhku.bean.Academy;
-import com.zhku.bean.BaseClass;
-import com.zhku.bean.CampusArea;
-import com.zhku.bean.Classroom;
-import com.zhku.bean.Course;
-import com.zhku.bean.CourseListPage;
-import com.zhku.bean.Major;
-import com.zhku.bean.MyPublicCourse;
-import com.zhku.bean.Organization;
-import com.zhku.bean.PublicCourseOption;
-import com.zhku.bean.SchoolBuilding;
-import com.zhku.bean.Teacher;
-import com.zhku.bean.Term;
+import com.zhku.bean.*;
 import com.zhku.module.analysis.AnalysiserFactroy;
 import com.zhku.module.analysis.IAnalysiser;
-import com.zhku.module.analysis.impl.CourseAnalysiser;
-import com.zhku.module.analysis.impl.MyPublicCourseAnalysiser;
-import com.zhku.module.analysis.impl.PublicCourseOptiontAnalysiser;
-import com.zhku.module.analysis.impl.PublicCoursePageAnalysiser;
-import com.zhku.module.analysis.impl.SelectorValueAnalysiser;
-import com.zhku.module.analysis.impl.StudentPageAnalysiser;
-import com.zhku.module.analysis.impl.SubmitCourseResultAnalysiser;
-import com.zhku.module.analysis.impl.TermClassCoursePageAnalysiser;
-import com.zhku.module.analysis.impl.TermCoursePageAnalysiser;
-import com.zhku.module.analysis.impl.TermTeacherCoursePageAnalysiser;
-import com.zhku.module.analysis.impl.ZXCoursePageAnalysiser;
+import com.zhku.module.analysis.impl.*;
 import com.zhku.module.bo.KeyValue;
-import com.zhku.module.fetchData.bo.CoursePageBo;
-import com.zhku.module.fetchData.bo.FetchRequest;
-import com.zhku.module.fetchData.bo.PublicCoursePageBo;
-import com.zhku.module.fetchData.bo.StudentPage;
-import com.zhku.module.fetchData.bo.TermClassCoursePageBo;
-import com.zhku.module.fetchData.bo.TermCoursePageBo;
-import com.zhku.module.fetchData.bo.TermTeacherCoursePageBo;
+import com.zhku.module.fetchData.bo.*;
 import com.zhku.module.utils.HTMLUtil;
 import com.zhku.utils.ServiceUtils;
 import com.zhku.utils.WebConfigUtils;
 import com.zhku.web.Constants;
 import com.zhku.web.Constants.URL;
+import zhku.jc.jfetchUrl.BasicNameValuePair;
+import zhku.jc.jfetchUrl.FetchUrl;
+import zhku.jc.jfetchUrl.FetchUrlFactory;
+import zhku.jc.jfetchUrl.NameValuePair;
+import zhku.jc.jfetchUrl.exception.FetchTimeoutException;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.*;
+import java.util.concurrent.*;
 /**
  * 封装 抓取类
  * @author JackCan
@@ -77,7 +40,7 @@ public class FetchHelper {
 	 * @return
 	 * @throws FetchTimeoutException 
 	 */
-	public List<MyPublicCourse> fetchMyPublicCourses(String cookie,Integer uid,List<Term> terms) throws FetchTimeoutException{
+	public List<MyPublicCourse> fetchMyPublicCourses(String cookie,Integer uid,List<Term> terms) throws FetchTimeoutException {
 		//先抓取个人选课表(不准确 ，还是 还 课程表吧)，再 抓取 成绩 最后合并
 		String myCourseUrl = URL.USER_COURSE_TABLE_RETRIVAL_URL.getUrl();
 		FetchUrl fetchUrl = FetchUrlFactory.getFetchurl();

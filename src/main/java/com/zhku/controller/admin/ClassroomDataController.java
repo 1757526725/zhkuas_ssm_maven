@@ -37,19 +37,30 @@ public class ClassroomDataController {
 	@Autowired
 	private IClassroomService classroomService;
 	@RequestMapping("/classrooms")
-	public String show(HttpServletRequest request){
+	public String show(HttpSession session ,HttpServletRequest request){
+		genBuildingsInSession(session);
 		List<Classroom> classrooms = classroomService.getClassrooms(1,PageSize.ADMIN_CLASSROOM.getSize(),true);
 		request.setAttribute("classrooms",classrooms);
 		return "admin_classroom";
 	}
+	private void genBuildingsInSession(HttpSession session) {
+		if(session.getAttribute("buildings")==null){
+			List<SchoolBuilding> sbs = schoolBuildingService.getSchoolBuildings();
+			session.setAttribute("buildings", sbs);
+		}
+	}
 	@RequestMapping("/classrooms/page/{pageNum}")
-	public String show(@PathVariable Integer pageNum,HttpServletRequest request){
+	public String show(HttpSession session,@PathVariable Integer pageNum,HttpServletRequest request){
+		genBuildingsInSession(session);
 		List<Classroom> classrooms = classroomService.getClassrooms(pageNum,PageSize.ADMIN_CLASSROOM.getSize(),true);
 		request.setAttribute("classrooms",classrooms);
 		return "admin_classroom";
 	}
 	@RequestMapping(value="/building/{buildingNo}/classrooms",method=RequestMethod.GET)
-	public String show(HttpServletRequest request,@PathVariable String buildingNo){
+	public String show(HttpSession session,HttpServletRequest request,@PathVariable String buildingNo){
+		genBuildingsInSession(session);
+		List<Classroom> classrooms = classroomService.getClassroomsBySchoolBuildingNo(buildingNo);
+		request.setAttribute("classrooms",classrooms);
 		return "admin_classroom";
 	}
 	@ResponseBody

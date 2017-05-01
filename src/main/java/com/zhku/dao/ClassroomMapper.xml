@@ -3,12 +3,27 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhku.dao.ClassroomMapper">
 
-	<resultMap type="com.zhku.bean.Classroom" id="ClassroomBaseResultMap">
+	<resultMap type="com.zhku.bean.Classroom" id="classroomBaseResultMap">
 		<id column="classroomId" property="id" />
 		<result column="classroomName" property="name" />
 		<result column="classroomNo" property="no" />
 	</resultMap>
-
+	<resultMap type="com.zhku.bean.Classroom" extends="classroomBaseResultMap" id="classroomResultMap">
+		<association property="schoolBuilding" column="schoolBuildingNo" resultMap="com.zhku.dao.SchoolBuildingMapper.SchoolBuildingBaseResultMap"></association>
+	</resultMap>
+	<sql id="sel_clumm">
+		zk_classroom.classroomId,
+		zk_classroom.classroomName,
+		zk_classroom.classroomNo,
+		zk_school_building.sbId,
+		zk_school_building.schoolBuildingName,
+		zk_school_building.campusId,
+		zk_school_building.schoolBuildingNo
+	</sql>
+	<sql id="joinTable">
+		zk_classroom LEFT JOIN 
+		zk_school_building on zk_classroom.schoolBuildingNo = zk_school_building.schoolBuildingNo
+	</sql>
 	<insert id="addClassroom" parameterType="com.zhku.bean.Classroom" useGeneratedKeys="true" keyProperty="id">
 		insert into
 		zk_classroom(classroomName,classroomNo,schoolBuildingNo) values(
@@ -29,20 +44,32 @@
 	</update>
 
 	<select id="getClassroomById" parameterType="_int"
-		resultMap="ClassroomBaseResultMap">
+		resultMap="classroomBaseResultMap">
 		select * from zk_classroom where classroomId=#{id}
 	</select>
-	<select id="getClassroomByNo" parameterType="String" resultMap="ClassroomBaseResultMap">
-			select * from zk_classroom where classroomNo=#{no}
+	<select id="getClassroomByNo" parameterType="String" resultMap="classroomBaseResultMap">
+		select * from zk_classroom where classroomNo=#{no}
 	</select>
 
-	<select id="getClassrooms" resultMap="ClassroomBaseResultMap">
-		select * from
-		zk_classroom
+	<select id="getClassrooms" resultMap="classroomResultMap">
+		select 
+		<include refid="sel_clumm"></include>
+		from
+		<include refid="joinTable"></include>
 	</select>
 
-	<select id="getClassroomsBySchoolBuildingNo" parameterType="String" resultMap="ClassroomBaseResultMap">
-		select * from
-		zk_classroom where schoolBuildingNo=#{no}
+	<select id="getClassroomsBySchoolBuildingNo" parameterType="String" resultMap="classroomResultMap">
+		select 
+		<include refid="sel_clumm"></include>
+		from
+		<include refid="joinTable"></include> 
+		where zk_classroom.schoolBuildingNo=#{no}
+	</select>
+	<select id="getClassroomsByKeywork" parameterType="String" resultMap="classroomResultMap">
+		select 
+		<include refid="sel_clumm"></include>
+		from
+		<include refid="joinTable"></include> 
+		where zk_classroom.classroomId like '%${_parameter}%' or zk_classroom.classroomName  like '%${_parameter}%' or zk_classroom.classroomNo like '%${_parameter}%' or zk_school_building.schoolBuildingName like '%${_parameter}%'
 	</select>
 </mapper>

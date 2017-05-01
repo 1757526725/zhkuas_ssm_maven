@@ -13,4 +13,5 @@ public interface ClassroomMapper {
 	public Classroom getClassroomByName(String name);
 	public List<Classroom> getClassrooms();
 	public List<Classroom> getClassroomsBySchoolBuildingNo(String schoolBuildingNo);
+	public List<Classroom> getClassroomsByKeywork(String keyword);
 }

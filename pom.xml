@@ -86,9 +86,9 @@
 			<scope>provided</scope>
 		</dependency> -->
 		<dependency>
-			<groupId>zhku.jackcan</groupId>
-			<artifactId>webCrawler</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>zhku.jc</groupId>
+			<artifactId>JFetchUrl</artifactId>
+			<version>0.0.1</version>
 			<type>jar</type>
 		</dependency>
 		<dependency>
@@ -180,6 +180,13 @@
 					<maxmem>512m</maxmem>
 				</configuration>
 			</plugin>
+		      <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-surefire-plugin</artifactId>
+		        <configuration>
+		          <skip>true</skip>
+		        </configuration>
+		      </plugin>
 		</plugins>
 	</build>
 </project>

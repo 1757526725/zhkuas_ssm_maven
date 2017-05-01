@@ -18,9 +18,9 @@
   <title>仲恺选课助手</title>
 
   <!-- Bootstrap core CSS -->
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-<%--   <link href="${pageContext.request.contextPath}/static/css/bootstrap.css" rel="stylesheet">
- --%>  <!-- Custom styles for this template -->
+<!--   <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet"> -->
+  <link href="${pageContext.request.contextPath}/static/css/bootstrap.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
   
   <link type="text/css" href="${pageContext.request.contextPath}/static/css/jquery.jscrollpane.css" rel="stylesheet" media="all" />
   <link href="${pageContext.request.contextPath}/static/css/main.css" rel="stylesheet">

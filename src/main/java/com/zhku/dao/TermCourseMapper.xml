@@ -13,7 +13,7 @@
 		<association property="term" column="termNo"
 			resultMap="com.zhku.dao.TermMapper.TermBaseResultMap"></association>
 		<association property="classroom" column="classroomNo"
-			javaType="com.zhku.bean.Classroom" resultMap="com.zhku.dao.ClassroomMapper.ClassroomBaseResultMap"></association>
+			javaType="com.zhku.bean.Classroom" resultMap="com.zhku.dao.ClassroomMapper.classroomBaseResultMap"></association>
 		<association property="course" column="cNo"
 			javaType="com.zhku.bean.Course" resultMap="com.zhku.dao.CourseMapper.courseResultMap"></association>
 		<association property="teacher" column="tNo"

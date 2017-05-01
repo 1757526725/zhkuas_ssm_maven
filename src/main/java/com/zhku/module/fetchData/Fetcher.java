@@ -1,13 +1,12 @@
 package com.zhku.module.fetchData;
 
-import java.util.List;
-
-import zhku.jackcan.webCrawler.FetchUrl;
-import zhku.jackcan.webCrawler.FetchUrlFactory;
-import zhku.jackcan.webCrawler.exception.FetchTimeoutException;
-
 import com.zhku.module.analysis.IAnalysiser;
 import com.zhku.module.fetchData.bo.FetchRequest;
+import zhku.jc.jfetchUrl.FetchUrl;
+import zhku.jc.jfetchUrl.FetchUrlFactory;
+import zhku.jc.jfetchUrl.exception.FetchTimeoutException;
+
+import java.util.List;
 
 public class Fetcher {
 	private FetchRequest request;
@@ -37,7 +36,7 @@ public class Fetcher {
 		return this;
 	}
 	
-	public List doFetch() throws FetchTimeoutException{
+	public List doFetch() throws FetchTimeoutException {
 		String http="GET";
 		String html=null;
 		fetchUrl.setDecodeCharset(getCharset());

@@ -237,8 +237,8 @@ var MySchemePage = (function() {
 							_hideScanResultLoading();
 							return;
 						}
-					
-						for (index_cNo in data.result) {
+						var obj = data.result;
+						for (index_cNo in obj) {
 							var message = '<span class="label label-danger pull-right flag-label">冲突</span>';
 							var courseNodeTd = $($("[cNo='" + index_cNo + "']")
 									.children().get(1));

@@ -101,6 +101,6 @@
 		from 
 		<include refid="joinRS"/>
 		where zk_my_schedule.termNo=#{termNo} and zk_my_schedule.uid=#{uid}
-
+		order by zk_course.cNo
 	</select>
 </mapper>

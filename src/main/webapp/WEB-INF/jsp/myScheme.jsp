@@ -67,7 +67,7 @@
 									<tr msid="${scheme.id}" cNo="${scheme.cNo}"
 										formValue="${scheme.formValue}">
 										<td class="order_num"><%=count++%></td>
-										<td><a href="public_course_detail?cNo=${scheme.cNo}"
+										<td><a href="${pageContext.request.contextPath}/main/course/detail/${scheme.course.no}"
 											target="_blank">[${scheme.cNo}]${scheme.course.name} </a><span
 											class="label label-info">${scheme.course.courseProfiles.pcType.name
 												}</span>

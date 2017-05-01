@@ -1,9 +1,9 @@
 package com.zhku.module.fetchData.bo;
 
+import zhku.jc.jfetchUrl.NameValuePair;
+
 import java.util.List;
 import java.util.Map;
-
-import zhku.jackcan.webCrawler.NameValuePair;
 
 
 
